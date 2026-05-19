@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cabinet.ui.controller.RendezVousController">
+    <top>
+        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 10;">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Button text="< Retour" onAction="#handleBack" style="-fx-background-color: #34495e; -fx-text-fill: white;"/>
+                <Label text="Gestion des Rendez-vous" textFill="WHITE" fontSize="20" style="-fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <DatePicker fx:id="datePicker" onAction="#handleDateFilter"/>
+                <Button text="Aujourd'hui" onAction="#handleToday"/>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <TableView fx:id="rdvTable" prefHeight="400">
+            <columns>
+                <TableColumn text="ID" prefWidth="50"/>
+                <TableColumn text="Patient" prefWidth="180"/>
+                <TableColumn text="Medecin" prefWidth="150"/>
+                <TableColumn text="Date" prefWidth="120"/>
+                <TableColumn text="Heure" prefWidth="80"/>
+                <TableColumn text="Topic" prefWidth="200"/>
+                <TableColumn text="Statut" prefWidth="100"/>
+                <TableColumn text="Actions" prefWidth="200"/>
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <HBox spacing="10" padding="10">
+            <Button text="Nouveau RDV" onAction="#handleAdd" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+            <Button text="Effectuer Consultation" onAction="#handleConsultation" style="-fx-background-color: #8e44ad; -fx-text-fill: white;"/>
+            <Button text="Annuler RDV" onAction="#handleCancel" style="-fx-background-color: #c0392b; -fx-text-fill: white;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

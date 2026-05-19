@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cabinet.ui.controller.LoginController">
+    <padding>
+        <Insets bottom="40" left="40" right="40" top="40"/>
+    </padding>
+    <Text text="CleMedice" fontSize="36" font="$font" textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="36"/>
+        </font>
+    </Text>
+    <Text text="Gestion de Cabinet Medical" fontSize="16" textAlignment="CENTER"/>
+    <VBox spacing="10" maxWidth="400">
+        <Label text="Email"/>
+        <TextField fx:id="emailField" promptText="Email"/>
+        <Label text="Mot de passe"/>
+        <PasswordField fx:id="passwordField" promptText="Mot de passe"/>
+        <Button fx:id="loginButton" text="Se connecter" maxWidth="Infinity" onAction="#handleLogin"/>
+        <Label fx:id="errorLabel" textFill="RED" managed="false"/>
+    </VBox>
+</VBox>
