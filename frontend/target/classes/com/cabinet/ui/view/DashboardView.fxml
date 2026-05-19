@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cabinet.ui.controller.DashboardController">
+    <top>
+        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Text text="CleMedice" fill="WHITE" fontSize="24">
+                    <font><Font name="System Bold" size="24"/></font>
+                </Text>
+                <Text fx:id="welcomeText" fill="#ecf0f1" fontSize="14"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="roleLabel" textFill="#ecf0f1"/>
+                <Button text="Deconnexion" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <GridPane hgap="20" vgap="20" alignment="CENTER" padding="30">
+            <Button text="Patients" onAction="#handlePatients" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10;"/>
+            <Button text="Rendez-vous" onAction="#handleRendezVous" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="1"/>
+            <Button text="Consultations" onAction="#handleConsultations" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #9b59b6; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="2"/>
+            <Button text="Ordonnances" onAction="#handleOrdonnances" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.rowIndex="1"/>
+            <Button text="Attestations" onAction="#handleAttestations" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #1abc9c; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Button text="Finance" onAction="#handleFinance" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="financeButton"/>
+            <Button text="Utilisateurs" onAction="#handleUsers" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.rowIndex="2" fx:id="usersButton"/>
+        </GridPane>
+    </center>
+</BorderPane>
