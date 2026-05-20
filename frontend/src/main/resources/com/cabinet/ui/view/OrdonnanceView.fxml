@@ -2,13 +2,14 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cabinet.ui.controller.OrdonnanceController">
     <top>
         <VBox style="-fx-background-color: #2c3e50; -fx-padding: 10;">
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Button text="< Retour" onAction="#handleBack" style="-fx-background-color: #34495e; -fx-text-fill: white;"/>
-                <Label text="Ordonnance" textFill="WHITE" fontSize="20" style="-fx-font-weight: bold;"/>
+                <Label text="Ordonnance" textFill="WHITE" style="-fx-font-weight: bold;"><font><Font size="20"/></font></Label>
             </HBox>
         </VBox>
     </top>

@@ -8,10 +8,12 @@
     <top>
         <VBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
             <HBox alignment="CENTER_LEFT" spacing="20">
-                <Text text="CleMedice" fill="WHITE" fontSize="24">
+                <Text text="CleMedice" fill="WHITE">
                     <font><Font name="System Bold" size="24"/></font>
                 </Text>
-                <Text fx:id="welcomeText" fill="#ecf0f1" fontSize="14"/>
+                <Text fx:id="welcomeText" fill="#ecf0f1">
+                    <font><Font size="14"/></font>
+                </Text>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Label fx:id="roleLabel" textFill="#ecf0f1"/>
                 <Button text="Deconnexion" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>

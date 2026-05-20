@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -8,12 +9,16 @@
     <padding>
         <Insets bottom="40" left="40" right="40" top="40"/>
     </padding>
-    <Text text="CleMedice" fontSize="36" font="$font" textAlignment="CENTER">
+    <Text text="CleMedice" textAlignment="CENTER">
         <font>
             <Font name="System Bold" size="36"/>
         </font>
     </Text>
-    <Text text="Gestion de Cabinet Medical" fontSize="16" textAlignment="CENTER"/>
+    <Text text="Gestion de Cabinet Medical" textAlignment="CENTER">
+        <font>
+            <Font size="16"/>
+        </font>
+    </Text>
     <VBox spacing="10" maxWidth="400">
         <Label text="Email"/>
         <TextField fx:id="emailField" promptText="Email"/>
