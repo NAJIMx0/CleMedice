@@ -32,7 +32,8 @@ public class LoginController {
             ApiService.setToken(response.getToken());
             MainApp.showDashboardView();
         } catch (Exception e) {
-            showError("Erreur de connexion: verifiez vos identifiants");
+            e.printStackTrace(); // add this
+            showError("Erreur: " + e.getClass().getSimpleName() + ": " + e.getMessage());
         } finally {
             loginButton.setDisable(false);
         }
