@@ -20,12 +20,11 @@
             <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
             <Label text="Tableau de bord" styleClass="section-title"/>
             <GridPane hgap="16" vgap="16" alignment="CENTER">
-                <VBox styleClass="dash-card" prefWidth="220" prefHeight="140" onMouseClicked="#handlePatients">
+                <VBox styleClass="dash-card" prefWidth="220" prefHeight="140" onMouseClicked="#handlePatients" spacing="8">
                     <StackPane style="-fx-background-color: #2980b9; -fx-background-radius: 20; -fx-min-width: 40; -fx-min-height: 40; -fx-max-width: 40; -fx-max-height: 40;">
                         <Label text="P" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
                     </StackPane>
                     <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                    <spacing><Insets top="8" left="0" bottom="0" right="0"/></spacing>
                     <Label styleClass="dash-card-title" text="Patients"/>
                     <Label styleClass="dash-card-desc" text="Gestion des fiches patients"/>
                 </VBox>

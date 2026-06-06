@@ -11,12 +11,14 @@ CleMedice is a full-stack desktop application for managing a medical practice. I
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
 - [Default Credentials](#default-credentials)
-- [Configuration](#configuration)
+- [Workflow](#workflow)
 - [Frontend Views](#frontend-views)
+- [Configuration](#configuration)
 - [API Endpoints](#api-endpoints)
 - [Security & Roles](#security--roles)
 - [Data Model](#data-model)
 - [Project Structure](#project-structure)
+- [Seed Data](#seed-data)
 - [Building for Production](#building-for-production)
 - [Switching to MySQL](#switching-to-mysql)
 
@@ -37,7 +39,7 @@ CleMedice is a full-stack desktop application for managing a medical practice. I
 | Validation | Jakarta Validation (Hibernate Validator) | — |
 | Build Tool | Maven | — |
 | Frontend Framework | JavaFX | 21.0.2 |
-| Frontend Language | Java | 17 |
+| Frontend Language | Java | 17+ |
 | FXML Parsing | javafx-fxml | 21.0.2 |
 | HTTP Client | `java.net.http.HttpClient` | Java 11+ |
 | JSON Processing | Jackson (databind + jsr310) | 2.17.0 |
@@ -92,6 +94,12 @@ mvn spring-boot:run
 
 The backend starts on **`http://localhost:8080`**. The H2 database console is available at **`http://localhost:8080/h2-console`** (JDBC URL: `jdbc:h2:file:./data/clemedice`, user: `sa`, password: empty).
 
+> **Note:** Only ONE process can hold the H2 file lock at a time. If you see "Database may be already in use", kill stale Java processes first:
+> ```bash
+> # Windows (PowerShell as Admin)
+> Stop-Process -Name "java" -Force
+> ```
+
 ### 2. Start the Frontend
 
 Open a **second terminal** and run:
@@ -111,13 +119,55 @@ Use the default admin account (see below).
 
 ## Default Credentials
 
-On the first startup, the backend automatically seeds a default administrator user:
+On the first startup, the backend automatically seeds data (see [Seed Data](#seed-data)):
 
 | Email | Password | Role |
 |---|---|---|
 | `admin@clemedice.com` | `admin123` | `MEDECIN_PRINCIPAL` |
+| `najim@clemedice.com` | `najim123` | `FERMLIYAT` |
+| `adil@clemedice.com` | `adil123` | `ASSISTANTE` |
+| `saad@clemedice.com` | `saad123` | `AUTRE_MEDECIN` |
+| `houssam@clemedice.com` | `houssam123` | `FERMLIYAT` |
 
 Additional users can be created through the frontend (Users section, visible only to `MEDECIN_PRINCIPAL` role).
+
+---
+
+## Workflow
+
+The application enforces a strict step-by-step workflow:
+
+```
+Patient → Rendez-vous → Consultation → Ordonnance → Paiement
+```
+
+Each step unlocks the next:
+1. **Patients** — Register and manage patients (no prerequisite)
+2. **Rendez-vous** — Book appointments for a patient (needs a patient)
+3. **Consultation** — Write consultation notes linked to a completed RDV (needs a rdv with statut EFFECTUE)
+4. **Ordonnance** — Generate prescriptions from a consultation (needs a consultation)
+5. **Paiement** — Record payments for appointments (any RDV)
+6. **Attestation** — Generate medical certificates for any patient
+
+Buttons for Consultations and Ordonnances are only enabled when the prerequisite step is completed. The Finance and Users sections are restricted to `MEDECIN_PRINCIPAL` role.
+
+---
+
+## Frontend Views
+
+| View | FXML File | Controller | Description |
+|---|---|---|---|
+| **Login** | `LoginView.fxml` | `LoginController` | Email/password authentication, retrieves JWT token |
+| **Dashboard** | `DashboardView.fxml` | `DashboardController` | Main navigation hub with role-based card visibility |
+| **Patients** | `PatientsView.fxml` | `PatientsController` | CRUD table with search, inline dialogs for add/edit |
+| **Rendez-vous** | `RendezVousView.fxml` | `RendezVousController` | Appointment management with statut badge column |
+| **Consultation** | `ConsultationView.fxml` | `ConsultationController` | Consultation notes linked to a rendez-vous |
+| **Ordonnance** | `OrdonnanceView.fxml` | `OrdonnanceController` | Prescription builder with medicament line items |
+| **Attestation** | `AttestationView.fxml` | `AttestationController` | Medical certificate generation (PDF) |
+| **Finance** | `FinanceView.fxml` | `FinanceController` | Monthly/annual financial summary with Excel export |
+| **Users** | `UsersView.fxml` | `UsersController` | User management (MEDECIN_PRINCIPAL only) |
+
+All views use a shared CSS design system (`styles.css`) with classes for top-bar, dash-card, badges, buttons, tables, form fields, and section titles. No inline `-fx-*` styles are used in FXML files.
 
 ---
 
@@ -154,25 +204,7 @@ spring.servlet.multipart.max-file-size=10MB
 spring.servlet.multipart.max-request-size=10MB
 ```
 
-The frontend API base URL is configured in `frontend/src/main/java/com/cabinet/ui/service/ApiService.java` (line 18, defaults to `http://localhost:8080/api`).
-
----
-
-## Frontend Views
-
-| View | FXML File | Controller | Description |
-|---|---|---|---|
-| **Login** | `LoginView.fxml` | `LoginController` | Email/password authentication, retrieves JWT token |
-| **Dashboard** | `DashboardView.fxml` | `DashboardController` | Main navigation hub with role-based button visibility |
-| **Patients** | `PatientsView.fxml` | `PatientsController` | CRUD table with search, inline dialogs for add/edit |
-| **Rendez-vous** | `RendezVousView.fxml` | `RendezVousController` | Appointment management with date filtering |
-| **Consultation** | `ConsultationView.fxml` | `ConsultationController` | Consultation notes linked to a rendez-vous |
-| **Ordonnance** | `OrdonnanceView.fxml` | `OrdonnanceController` | Prescription builder with medicament line items |
-| **Attestation** | `AttestationView.fxml` | `AttestationController` | Medical certificate generation |
-| **Finance** | `FinanceView.fxml` | `FinanceController` | Monthly/annual financial summary dashboard |
-| **Users** | `UsersView.fxml` | `UsersController` | User management (Principal only) |
-
-The frontend uses Java's built-in `java.net.http.HttpClient` for all API calls, with the JWT token stored statically and attached to every request as `Authorization: Bearer <token>`.
+The frontend API base URL is configured in `frontend/src/main/java/com/cabinet/ui/service/ApiService.java` (defaults to `http://localhost:8080/api`).
 
 ---
 
@@ -278,7 +310,7 @@ The application defines four roles with graduated permissions:
 Authentication flow:
 1. Client sends `POST /api/auth/login` with email + password
 2. Server validates credentials via `BCryptPasswordEncoder`
-3. Server generates a JWT containing the user's email and role (signed with HMAC-SHA256)
+3. Server generates a JWT containing the user's ID, email, and role (signed with HMAC-SHA256)
 4. Client stores the JWT and sends it as `Authorization: Bearer <token>` on all subsequent requests
 5. `JwtAuthenticationFilter` intercepts each request, validates the token, and sets the security context
 6. Role-based access is enforced at the endpoint level via `.hasRole()` / `.hasAnyRole()`
@@ -367,7 +399,7 @@ CleMedice/
 │       │   ├── JwtTokenProvider.java         # JWT generation & validation
 │       │   ├── JwtAuthenticationFilter.java  # Request filter for JWT
 │       │   ├── GlobalExceptionHandler.java   # @RestControllerAdvice
-│       │   └── DataInitializer.java          # Seeds default admin user
+│       │   └── DataInitializer.java          # Seeds admin + test data on fresh DB
 │       ├── controller/
 │       │   ├── AuthController.java
 │       │   ├── PatientController.java
@@ -387,16 +419,16 @@ CleMedice/
 │       │   ├── PaiementService.java
 │       │   └── UserService.java
 │       ├── repository/               # JPA repositories
-│       ├── model/                     # Entities + enums
-│       ├── dto/                       # Request/response DTOs
+│       ├── model/                    # Entities + enums
+│       ├── dto/                      # Request/response DTOs
 │       └── util/
-│           ├── PdfGenerator.java      # iText-based PDF generation
-│           └── ExcelExporter.java     # Apache POI Excel export
+│           ├── PdfGenerator.java     # iText-based PDF generation
+│           └── ExcelExporter.java    # Apache POI Excel export
 │
 ├── frontend/                         # JavaFX Desktop Client
 │   ├── pom.xml
 │   └── src/main/java/com/cabinet/ui/
-│       ├── MainApp.java              # JavaFX application entry point
+│       ├── MainApp.java             # JavaFX entry point (global CSS, view navigation)
 │       ├── controller/
 │       │   ├── LoginController.java
 │       │   ├── DashboardController.java
@@ -408,18 +440,33 @@ CleMedice/
 │       │   ├── FinanceController.java
 │       │   └── UsersController.java
 │       ├── service/
-│       │   └── ApiService.java       # HTTP client + token management
+│       │   └── ApiService.java      # HTTP client + token management
 │       └── model/
 │           ├── LoginResponse.java
 │           ├── PatientDTO.java
 │           ├── RendezVousDTO.java
 │           ├── ConsultationDTO.java
+│           ├── MedicamentDTO.java
+│           ├── OrdonnanceDTO.java
+│           ├── OrdonnanceResultDTO.java
+│           ├── PaiementDTO.java
 │           └── FinanceSummaryDTO.java
 │
 ├── data/                            # H2 database file (dev, gitignored)
 ├── TECHNICAL_CONCEPTION.md          # Architecture document
 └── README.md
 ```
+
+---
+
+## Seed Data
+
+On first startup, `DataInitializer.java` automatically seeds the following data (idempotent, runs only when tables are empty):
+
+- **5 users**: 1 MEDECIN_PRINCIPAL, 2 FERMLIYAT, 1 ASSISTANTE, 1 AUTRE_MEDECIN
+- **20 patients** with realistic Moroccan names, CINs, phone numbers, dates of birth, and addresses
+- **10 rendez-vous** spread across past and future dates, various statuses (PLANIFIE, EFFECTUE, ANNULE)
+- **4 paiements** linked to EFFECTUE rendez-vous
 
 ---
 
