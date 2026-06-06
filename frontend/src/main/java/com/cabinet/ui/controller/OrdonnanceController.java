@@ -1,6 +1,11 @@
 package com.cabinet.ui.controller;
 
 import com.cabinet.ui.MainApp;
+import com.cabinet.ui.model.MedicamentDTO;
+import com.cabinet.ui.model.OrdonnanceDTO;
+import com.cabinet.ui.model.OrdonnanceResultDTO;
+import com.cabinet.ui.model.RendezVousDTO;
+import com.cabinet.ui.service.ApiService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,19 +13,35 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalDate;
+import java.util.List;
 
 public class OrdonnanceController {
 
+    @FXML private Label patientLabel;
     @FXML private TextField casPatientField;
-    @FXML private TableView<Map<String, String>> medicamentTable;
-    @FXML private TableColumn<Map<String, String>, String> nomCol;
-    @FXML private TableColumn<Map<String, String>, String> dosageCol;
-    @FXML private TableColumn<Map<String, String>, String> dureeCol;
-    @FXML private TableColumn<Map<String, String>, String> instrCol;
+    @FXML private TableView<MedicamentDTO> medicamentTable;
+    @FXML private TableColumn<MedicamentDTO, String> nomCol;
+    @FXML private TableColumn<MedicamentDTO, String> dosageCol;
+    @FXML private TableColumn<MedicamentDTO, String> dureeCol;
+    @FXML private TableColumn<MedicamentDTO, String> instrCol;
+    @FXML private Button printButton;
 
-    private final ObservableList<Map<String, String>> medicaments = FXCollections.observableArrayList();
+    private final ObservableList<MedicamentDTO> medicaments = FXCollections.observableArrayList();
+    private Long consultationId;
+    private RendezVousDTO currentRdv;
+    private Long savedOrdonnanceId;
+
+    public void setContext(Long consultationId, RendezVousDTO rdv) {
+        this.consultationId = consultationId;
+        this.currentRdv = rdv;
+        if (rdv != null) {
+            patientLabel.setText("Patient: " + rdv.getPatientNom());
+        }
+        printButton.setDisable(true);
+    }
 
     @FXML
     public void initialize() {
@@ -33,7 +54,7 @@ public class OrdonnanceController {
 
     @FXML
     private void handleAddMedicament(ActionEvent event) {
-        Dialog<Map<String, String>> dialog = new Dialog<>();
+        Dialog<MedicamentDTO> dialog = new Dialog<>();
         dialog.setTitle("Ajouter Medicament");
         ButtonType saveBtn = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
@@ -53,11 +74,11 @@ public class OrdonnanceController {
 
         dialog.setResultConverter(btn -> {
             if (btn == saveBtn) {
-                Map<String, String> med = new HashMap<>();
-                med.put("nom", nomField.getText());
-                med.put("dosage", dosageField.getText());
-                med.put("duree", dureeField.getText());
-                med.put("instructions", instrField.getText());
+                MedicamentDTO med = new MedicamentDTO();
+                med.setNom(nomField.getText());
+                med.setDosage(dosageField.getText());
+                med.setDuree(dureeField.getText());
+                med.setInstructions(instrField.getText());
                 return med;
             }
             return null;
@@ -68,23 +89,62 @@ public class OrdonnanceController {
 
     @FXML
     private void handleRemoveMedicament(ActionEvent event) {
-        Map<String, String> selected = medicamentTable.getSelectionModel().getSelectedItem();
+        MedicamentDTO selected = medicamentTable.getSelectionModel().getSelectedItem();
         if (selected != null) medicaments.remove(selected);
     }
 
     @FXML
     private void handleSave(ActionEvent event) {
-        showAlert("Info", "Ordonnance enregistree (integration backend a finaliser)");
+        if (consultationId == null) {
+            showAlert("Erreur", "Aucune consultation liee");
+            return;
+        }
+        if (medicaments.isEmpty()) {
+            showAlert("Attention", "Ajoutez au moins un medicament");
+            return;
+        }
+        try {
+            OrdonnanceDTO dto = new OrdonnanceDTO();
+            dto.setConsultationId(consultationId);
+            dto.setCasPatient(casPatientField.getText());
+            dto.setDate(LocalDate.now());
+            dto.setMedicaments(List.copyOf(medicaments));
+            OrdonnanceResultDTO result = ApiService.createOrdonnance(dto);
+            savedOrdonnanceId = result.getId();
+            printButton.setDisable(false);
+            showAlert("Succes", "Ordonnance enregistree (ID: " + savedOrdonnanceId + ")");
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible d'enregistrer: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handlePrint(ActionEvent event) {
-        showAlert("Info", "PDF genere (integration backend a finaliser)");
+        if (savedOrdonnanceId == null) {
+            showAlert("Attention", "Enregistrez d'abord l'ordonnance");
+            return;
+        }
+        try {
+            byte[] pdfBytes = ApiService.getOrdonnancePdf(savedOrdonnanceId);
+            File tempFile = File.createTempFile("ordonnance_" + savedOrdonnanceId + "_", ".pdf");
+            tempFile.deleteOnExit();
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                fos.write(pdfBytes);
+            }
+            if (java.awt.Desktop.isDesktopSupported() &&
+                java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.OPEN)) {
+                java.awt.Desktop.getDesktop().open(tempFile);
+            } else {
+                showAlert("Info", "PDF sauvegarde: " + tempFile.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible d'ouvrir le PDF: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handleBack(ActionEvent event) throws Exception {
-        MainApp.showConsultationView();
+        MainApp.showConsultationView(currentRdv);
     }
 
     private void showAlert(String title, String msg) {

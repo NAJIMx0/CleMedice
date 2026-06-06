@@ -8,6 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AttestationController {
@@ -27,12 +30,32 @@ public class AttestationController {
 
     @FXML
     private void handleGenerate(ActionEvent event) {
-        PatientDTO patient = patientCombo.getValue();
-        if (patient == null) {
+        PatientDTO p = patientCombo.getValue();
+        if (p == null) {
             showAlert("Attention", "Selectionnez un patient");
             return;
         }
-        showAlert("Succes", "Attestation PDF generee (integration backend a finaliser)");
+        String contenu = contenuField.getText().trim();
+        if (contenu.isEmpty()) {
+            showAlert("Attention", "Saisissez le contenu de l'attestation");
+            return;
+        }
+        try {
+            byte[] pdf = ApiService.generateAttestation(
+                    p.getNom(), p.getPrenom(), contenu, LocalDate.now().toString()
+            );
+            File f = File.createTempFile("attestation_", ".pdf");
+            f.deleteOnExit();
+            try (FileOutputStream fos = new FileOutputStream(f)) { fos.write(pdf); }
+            if (java.awt.Desktop.isDesktopSupported() &&
+                java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.OPEN)) {
+                java.awt.Desktop.getDesktop().open(f);
+            } else {
+                showAlert("Info", "PDF sauvegarde: " + f.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible de generer l'attestation: " + e.getMessage());
+        }
     }
 
     @FXML

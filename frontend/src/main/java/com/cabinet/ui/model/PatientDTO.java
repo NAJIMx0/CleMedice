@@ -1,7 +1,6 @@
 package com.cabinet.ui.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,4 +27,9 @@ public class PatientDTO {
     public void setDateNaissance(LocalDate dateNaissance) { this.dateNaissance = dateNaissance; }
     public String getAdresse() { return adresse; }
     public void setAdresse(String adresse) { this.adresse = adresse; }
+
+    @Override
+    public String toString() {
+        return nom + " " + prenom + (cin != null ? " - " + cin : "");
+    }
 }

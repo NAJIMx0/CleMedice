@@ -7,30 +7,61 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cabinet.ui.controller.DashboardController">
     <top>
-        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
-            <HBox alignment="CENTER_LEFT" spacing="20">
-                <Text text="CleMedice" fill="WHITE">
-                    <font><Font name="System Bold" size="24"/></font>
-                </Text>
-                <Text fx:id="welcomeText" fill="#ecf0f1">
-                    <font><Font size="14"/></font>
-                </Text>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="roleLabel" textFill="#ecf0f1"/>
-                <Button text="Deconnexion" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
-            </HBox>
-        </VBox>
+        <HBox styleClass="top-bar" alignment="CENTER_LEFT" spacing="12">
+            <Label styleClass="top-bar-title" text="CleMedice"/>
+            <Text fx:id="welcomeText" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="roleLabel" style="-fx-background-color: #d6eaf8; -fx-text-fill: #1a5276; -fx-background-radius: 10; -fx-padding: 2 10; -fx-font-size: 12px;"/>
+            <Button text="Deconnexion" onAction="#handleLogout" styleClass="btn-danger"/>
+        </HBox>
     </top>
     <center>
-        <GridPane hgap="20" vgap="20" alignment="CENTER">
-            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
-            <Button text="Patients" onAction="#handlePatients" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10;"/>
-            <Button text="Rendez-vous" onAction="#handleRendezVous" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="1"/>
-            <Button text="Consultations" onAction="#handleConsultations" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #9b59b6; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="2"/>
-            <Button text="Ordonnances" onAction="#handleOrdonnances" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.rowIndex="1"/>
-            <Button text="Attestations" onAction="#handleAttestations" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #1abc9c; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-            <Button text="Finance" onAction="#handleFinance" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="financeButton"/>
-            <Button text="Utilisateurs" onAction="#handleUsers" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.rowIndex="2" fx:id="usersButton"/>
-        </GridPane>
+        <VBox alignment="CENTER" spacing="24">
+            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+            <Label text="Tableau de bord" styleClass="section-title"/>
+            <GridPane hgap="16" vgap="16" alignment="CENTER">
+                <VBox styleClass="dash-card" prefWidth="220" prefHeight="140" onMouseClicked="#handlePatients">
+                    <StackPane style="-fx-background-color: #2980b9; -fx-background-radius: 20; -fx-min-width: 40; -fx-min-height: 40; -fx-max-width: 40; -fx-max-height: 40;">
+                        <Label text="P" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                    </StackPane>
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                    <spacing><Insets top="8" left="0" bottom="0" right="0"/></spacing>
+                    <Label styleClass="dash-card-title" text="Patients"/>
+                    <Label styleClass="dash-card-desc" text="Gestion des fiches patients"/>
+                </VBox>
+                <VBox styleClass="dash-card" prefWidth="220" prefHeight="140" onMouseClicked="#handleRendezVous" GridPane.columnIndex="1">
+                    <StackPane style="-fx-background-color: #27ae60; -fx-background-radius: 20; -fx-min-width: 40; -fx-min-height: 40; -fx-max-width: 40; -fx-max-height: 40;">
+                        <Label text="R" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                    </StackPane>
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                    <Label styleClass="dash-card-title" text="Rendez-vous"/>
+                    <Label styleClass="dash-card-desc" text="Planification et suivi"/>
+                </VBox>
+                <VBox styleClass="dash-card" prefWidth="220" prefHeight="140" onMouseClicked="#handleAttestations" GridPane.columnIndex="2">
+                    <StackPane style="-fx-background-color: #16a085; -fx-background-radius: 20; -fx-min-width: 40; -fx-min-height: 40; -fx-max-width: 40; -fx-max-height: 40;">
+                        <Label text="A" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                    </StackPane>
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                    <Label styleClass="dash-card-title" text="Attestations"/>
+                    <Label styleClass="dash-card-desc" text="Certificats medicaux PDF"/>
+                </VBox>
+                <VBox styleClass="dash-card" prefWidth="220" prefHeight="140" onMouseClicked="#handleFinance" GridPane.rowIndex="1">
+                    <StackPane style="-fx-background-color: #e67e22; -fx-background-radius: 20; -fx-min-width: 40; -fx-min-height: 40; -fx-max-width: 40; -fx-max-height: 40;">
+                        <Label text="F" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                    </StackPane>
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                    <Label styleClass="dash-card-title" text="Finance"/>
+                    <Label styleClass="dash-card-desc" text="Paiements et statistiques"/>
+                </VBox>
+                <VBox fx:id="usersCard" styleClass="dash-card" prefWidth="220" prefHeight="140" onMouseClicked="#handleUsers" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <StackPane style="-fx-background-color: #c0392b; -fx-background-radius: 20; -fx-min-width: 40; -fx-min-height: 40; -fx-max-width: 40; -fx-max-height: 40;">
+                        <Label text="U" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                    </StackPane>
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                    <Label styleClass="dash-card-title" text="Utilisateurs"/>
+                    <Label styleClass="dash-card-desc" text="Gestion des comptes"/>
+                </VBox>
+            </GridPane>
+        </VBox>
     </center>
 </BorderPane>

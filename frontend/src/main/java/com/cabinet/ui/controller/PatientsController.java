@@ -59,7 +59,18 @@ public class PatientsController {
 
     @FXML
     private void handleSearch(ActionEvent event) {
-        loadPatients();
+        String keyword = searchField.getText().trim();
+        try {
+            List<PatientDTO> patients;
+            if (keyword.isEmpty()) {
+                patients = ApiService.getPatients();
+            } else {
+                patients = ApiService.searchPatients(keyword);
+            }
+            data.setAll(patients);
+        } catch (Exception e) {
+            showAlert("Erreur", "Erreur de recherche: " + e.getMessage());
+        }
     }
 
     @FXML

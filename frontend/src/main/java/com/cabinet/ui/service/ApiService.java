@@ -7,11 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 public class ApiService {
 
@@ -56,6 +59,15 @@ public class ApiService {
         return mapper.readValue(response.body(), new TypeReference<List<PatientDTO>>() {});
     }
 
+    public static List<PatientDTO> searchPatients(String keyword) throws Exception {
+        String encoded = URLEncoder.encode(keyword, StandardCharsets.UTF_8);
+        HttpRequest request = authRequest()
+                .uri(URI.create(BASE_URL + "/patients/search?keyword=" + encoded))
+                .GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return mapper.readValue(response.body(), new TypeReference<List<PatientDTO>>() {});
+    }
+
     public static PatientDTO createPatient(PatientDTO dto) throws Exception {
         String json = mapper.writeValueAsString(dto);
         HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/patients"))
@@ -93,6 +105,13 @@ public class ApiService {
         return mapper.readValue(response.body(), RendezVousDTO.class);
     }
 
+    public static void updateRendezVousStatut(Long id, String statut) throws Exception {
+        HttpRequest request = authRequest()
+                .uri(URI.create(BASE_URL + "/rendezvous/" + id + "/statut?statut=" + statut))
+                .PUT(HttpRequest.BodyPublishers.noBody()).build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
     // --- CONSULTATIONS ---
     public static ConsultationDTO createConsultation(ConsultationDTO dto) throws Exception {
         String json = mapper.writeValueAsString(dto);
@@ -102,7 +121,47 @@ public class ApiService {
         return mapper.readValue(response.body(), ConsultationDTO.class);
     }
 
+    // --- ORDONNANCES ---
+    public static OrdonnanceResultDTO createOrdonnance(OrdonnanceDTO dto) throws Exception {
+        String json = mapper.writeValueAsString(dto);
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/ordonnances"))
+                .POST(HttpRequest.BodyPublishers.ofString(json)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) throw new RuntimeException("Erreur serveur: " + response.statusCode());
+        return mapper.readValue(response.body(), OrdonnanceResultDTO.class);
+    }
+
+    public static byte[] getOrdonnancePdf(Long id) throws Exception {
+        HttpRequest request = authRequest()
+                .uri(URI.create(BASE_URL + "/ordonnances/" + id + "/pdf"))
+                .GET().build();
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        if (response.statusCode() != 200) throw new RuntimeException("Erreur serveur: " + response.statusCode());
+        return response.body();
+    }
+
+    // --- ATTESTATIONS ---
+    public static byte[] generateAttestation(String patientNom, String patientPrenom, String contenu, String date) throws Exception {
+        String json = mapper.writeValueAsString(Map.of(
+                "patientNom", patientNom,
+                "patientPrenom", patientPrenom,
+                "contenu", contenu,
+                "date", date
+        ));
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/attestations/generate"))
+                .POST(HttpRequest.BodyPublishers.ofString(json)).build();
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        if (response.statusCode() != 200) throw new RuntimeException("Erreur serveur: " + response.statusCode());
+        return response.body();
+    }
+
     // --- FINANCE ---
+    public static List<PaiementDTO> getPaiements() throws Exception {
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/finance")).GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return mapper.readValue(response.body(), new TypeReference<List<PaiementDTO>>() {});
+    }
+
     public static FinanceSummaryDTO getFinanceSummary(int annee, int mois) throws Exception {
         HttpRequest request = authRequest()
                 .uri(URI.create(BASE_URL + "/finance/summary?annee=" + annee + "&mois=" + mois))
@@ -111,11 +170,74 @@ public class ApiService {
         return mapper.readValue(response.body(), FinanceSummaryDTO.class);
     }
 
-    // USERS
+    public static PaiementDTO createPaiement(Long rendezVousId, Double montant, String modePaiement, String notes) throws Exception {
+        String json = mapper.writeValueAsString(Map.of(
+                "rendezVousId", rendezVousId,
+                "montant", montant,
+                "modePaiement", modePaiement,
+                "date", java.time.LocalDate.now().toString(),
+                "statut", "PAYE",
+                "notes", notes != null ? notes : ""
+        ));
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/finance"))
+                .POST(HttpRequest.BodyPublishers.ofString(json)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return mapper.readValue(response.body(), PaiementDTO.class);
+    }
+
+    public static byte[] exportFinance(String start, String end) throws Exception {
+        HttpRequest request = authRequest()
+                .uri(URI.create(BASE_URL + "/export/finance?start=" + start + "&end=" + end))
+                .GET().build();
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        if (response.statusCode() != 200) throw new RuntimeException("Erreur serveur: " + response.statusCode());
+        return response.body();
+    }
+
+    // --- USERS ---
     public static List<UserDTO> getUsers() throws Exception {
         HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/users")).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return mapper.readValue(response.body(), new TypeReference<List<UserDTO>>() {});
+    }
+
+    public static UserDTO createUser(String nom, String email, String role, String password) throws Exception {
+        String json = mapper.writeValueAsString(Map.of(
+                "nom", nom,
+                "email", email,
+                "role", role,
+                "password", password
+        ));
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/users"))
+                .POST(HttpRequest.BodyPublishers.ofString(json)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return mapper.readValue(response.body(), UserDTO.class);
+    }
+
+    public static UserDTO updateUser(Long id, String nom, String email, String role, boolean enabled) throws Exception {
+        String json = mapper.writeValueAsString(Map.of(
+                "nom", nom,
+                "email", email,
+                "role", role,
+                "enabled", enabled
+        ));
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/users/" + id))
+                .PUT(HttpRequest.BodyPublishers.ofString(json)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return mapper.readValue(response.body(), UserDTO.class);
+    }
+
+    public static void resetUserPassword(Long id, String newPassword) throws Exception {
+        String json = mapper.writeValueAsString(Map.of("newPassword", newPassword));
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/users/" + id + "/reset-password"))
+                .PUT(HttpRequest.BodyPublishers.ofString(json)).build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static void deleteUser(Long id) throws Exception {
+        HttpRequest request = authRequest().uri(URI.create(BASE_URL + "/users/" + id))
+                .DELETE().build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     // --- helper classes ---

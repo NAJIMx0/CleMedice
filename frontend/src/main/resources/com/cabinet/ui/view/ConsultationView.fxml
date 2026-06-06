@@ -2,34 +2,36 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cabinet.ui.controller.ConsultationController">
     <top>
-        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 10;">
-            <HBox alignment="CENTER_LEFT" spacing="15">
-                <Button text="&lt; Retour" onAction="#handleBack" style="-fx-background-color: #34495e; -fx-text-fill: white;"/>
-                <Label text="Consultation" textFill="WHITE" style="-fx-font-weight: bold;"><font><Font size="20"/></font></Label>
-            </HBox>
-        </VBox>
+        <HBox styleClass="top-bar" alignment="CENTER_LEFT" spacing="12">
+            <Button text="&lt; Retour" onAction="#handleBack" styleClass="btn-secondary"/>
+            <Label text="Consultation" styleClass="top-bar-title"/>
+            <Label fx:id="patientLabel" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d; -fx-padding: 0 0 0 12;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="dateLabel" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;"/>
+        </HBox>
     </top>
     <center>
-        <VBox spacing="15" style="-fx-padding: 20;">
-            <HBox spacing="10">
-                <Label text="Patient:" style="-fx-font-weight: bold;"/>
-                <Label fx:id="patientLabel"/>
-                <Label text="Date:" style="-fx-font-weight: bold;" GridPane.columnIndex="2"/>
-                <DatePicker fx:id="datePicker"/>
-            </HBox>
-            <Label text="Description"/>
-            <TextArea fx:id="descriptionField" prefRowCount="4"/>
-            <Label text="Observations"/>
-            <TextArea fx:id="observationsField" prefRowCount="4"/>
-            <Label text="Cas Patient"/>
-            <TextField fx:id="casPatientField"/>
-            <HBox spacing="10">
-                <Button text="Enregistrer Consultation" onAction="#handleSave" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
-                <Button text="Generer Ordonnance" onAction="#handleOrdonnance" style="-fx-background-color: #e67e22; -fx-text-fill: white;"/>
+        <VBox spacing="12" style="-fx-padding: 20;">
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="130"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Description" GridPane.rowIndex="0"/>
+                <TextArea fx:id="descriptionField" prefRowCount="4" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Observations" GridPane.rowIndex="1"/>
+                <TextArea fx:id="observationsField" prefRowCount="4" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Cas Patient" GridPane.rowIndex="2"/>
+                <TextField fx:id="casPatientField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Date" GridPane.rowIndex="3"/>
+                <DatePicker fx:id="datePicker" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
+            <HBox spacing="10" style="-fx-padding: 10 0 0 0;">
+                <Button text="Enregistrer Consultation" onAction="#handleSave" styleClass="btn-success"/>
+                <Button fx:id="ordonnanceButton" text="Créer Ordonnance" onAction="#handleOrdonnance" styleClass="btn-primary" disable="true"/>
             </HBox>
         </VBox>
     </center>

@@ -1,5 +1,8 @@
 package com.cabinet.ui;
 
+import com.cabinet.ui.controller.ConsultationController;
+import com.cabinet.ui.controller.OrdonnanceController;
+import com.cabinet.ui.model.RendezVousDTO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,13 +25,17 @@ public class MainApp extends Application {
 
     public static void showLoginView() throws Exception {
         Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/LoginView.fxml"));
-        primaryStage.setScene(new Scene(root, 800, 600));
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 
     public static void showDashboardView() throws Exception {
         Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/DashboardView.fxml"));
-        primaryStage.setScene(new Scene(root, 1280, 800));
+        Scene scene = new Scene(root, 1280, 800);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 
@@ -42,37 +49,55 @@ public class MainApp extends Application {
 
     public static void showRendezVousView() throws Exception {
         Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/RendezVousView.fxml"));
-        primaryStage.setScene(new Scene(root, 1280, 800));
+        Scene scene = new Scene(root, 1280, 800);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 
-    public static void showConsultationView() throws Exception {
-        Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/ConsultationView.fxml"));
-        primaryStage.setScene(new Scene(root, 1280, 800));
+    public static void showConsultationView(RendezVousDTO rdv) throws Exception {
+        FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/com/cabinet/ui/view/ConsultationView.fxml"));
+        Parent root = loader.load();
+        ConsultationController ctrl = loader.getController();
+        ctrl.setRendezVous(rdv);
+        Scene scene = new Scene(root, 1280, 800);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 
-    public static void showOrdonnanceView() throws Exception {
-        Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/OrdonnanceView.fxml"));
-        primaryStage.setScene(new Scene(root, 1280, 800));
+    public static void showOrdonnanceView(Long consultationId, RendezVousDTO rdv) throws Exception {
+        FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/com/cabinet/ui/view/OrdonnanceView.fxml"));
+        Parent root = loader.load();
+        OrdonnanceController ctrl = loader.getController();
+        ctrl.setContext(consultationId, rdv);
+        Scene scene = new Scene(root, 1280, 800);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 
     public static void showAttestationView() throws Exception {
         Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/AttestationView.fxml"));
-        primaryStage.setScene(new Scene(root, 1280, 800));
+        Scene scene = new Scene(root, 1280, 800);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 
     public static void showFinanceView() throws Exception {
         Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/FinanceView.fxml"));
-        primaryStage.setScene(new Scene(root, 1280, 800));
+        Scene scene = new Scene(root, 1280, 800);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 
     public static void showUsersView() throws Exception {
         Parent root = FXMLLoader.load(MainApp.class.getResource("/com/cabinet/ui/view/UsersView.fxml"));
-        primaryStage.setScene(new Scene(root, 1280, 800));
+        Scene scene = new Scene(root, 1280, 800);
+        scene.getStylesheets().add(MainApp.class.getResource("/com/cabinet/ui/view/styles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
 

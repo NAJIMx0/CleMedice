@@ -4,26 +4,26 @@ import com.cabinet.ui.MainApp;
 import com.cabinet.ui.service.ApiService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class DashboardController {
 
     @FXML private Text welcomeText;
     @FXML private Label roleLabel;
-    @FXML private Button financeButton;
-    @FXML private Button usersButton;
+    @FXML private VBox usersCard;
 
     @FXML
     public void initialize() {
         String role = ApiService.getToken() != null ? extractRole() : "";
         welcomeText.setText("Bienvenue au Cabinet CleMedice");
-        roleLabel.setText("Role: " + role);
+        roleLabel.setText(role);
 
         boolean isMedecinPrincipal = "MEDECIN_PRINCIPAL".equals(role);
-        financeButton.setVisible(isMedecinPrincipal);
-        usersButton.setVisible(isMedecinPrincipal);
+        usersCard.setVisible(isMedecinPrincipal);
+        usersCard.setManaged(isMedecinPrincipal);
     }
 
     private String extractRole() {
@@ -45,37 +45,27 @@ public class DashboardController {
     }
 
     @FXML
-    private void handlePatients(ActionEvent event) throws Exception {
+    private void handlePatients(MouseEvent event) throws Exception {
         MainApp.showPatientsView();
     }
 
     @FXML
-    private void handleRendezVous(ActionEvent event) throws Exception {
+    private void handleRendezVous(MouseEvent event) throws Exception {
         MainApp.showRendezVousView();
     }
 
     @FXML
-    private void handleConsultations(ActionEvent event) throws Exception {
-        MainApp.showConsultationView();
-    }
-
-    @FXML
-    private void handleOrdonnances(ActionEvent event) throws Exception {
-        MainApp.showOrdonnanceView();
-    }
-
-    @FXML
-    private void handleAttestations(ActionEvent event) throws Exception {
+    private void handleAttestations(MouseEvent event) throws Exception {
         MainApp.showAttestationView();
     }
 
     @FXML
-    private void handleFinance(ActionEvent event) throws Exception {
+    private void handleFinance(MouseEvent event) throws Exception {
         MainApp.showFinanceView();
     }
 
     @FXML
-    private void handleUsers(ActionEvent event) throws Exception {
+    private void handleUsers(MouseEvent event) throws Exception {
         MainApp.showUsersView();
     }
 

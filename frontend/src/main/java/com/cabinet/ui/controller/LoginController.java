@@ -15,7 +15,7 @@ public class LoginController {
     @FXML private Label errorLabel;
 
     @FXML
-    private void handleLogin(ActionEvent event) {
+    public void handleLogin(ActionEvent event) {
         String email = emailField.getText().trim();
         String password = passwordField.getText().trim();
 
@@ -26,13 +26,14 @@ public class LoginController {
 
         loginButton.setDisable(true);
         errorLabel.setVisible(false);
+        errorLabel.setManaged(false);
 
         try {
             LoginResponse response = ApiService.login(email, password);
             ApiService.setToken(response.getToken());
             MainApp.showDashboardView();
         } catch (Exception e) {
-            e.printStackTrace(); // add this
+            e.printStackTrace();
             showError("Erreur: " + e.getClass().getSimpleName() + ": " + e.getMessage());
         } finally {
             loginButton.setDisable(false);

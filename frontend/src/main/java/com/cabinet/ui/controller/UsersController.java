@@ -45,22 +45,146 @@ public class UsersController {
 
     @FXML
     private void handleAdd(ActionEvent event) {
-        showAlert("Info", "Ajout utilisateur (integration a finaliser)");
+        Dialog<ApiService.UserDTO> dialog = new Dialog<>();
+        dialog.setTitle("Ajouter Utilisateur");
+
+        ButtonType saveBtn = new ButtonType("Enregistrer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        TextField nomField = new TextField();
+        TextField emailField = new TextField();
+        ComboBox<String> roleCombo = new ComboBox<>();
+        roleCombo.setItems(FXCollections.observableArrayList(
+                "MEDECIN_PRINCIPAL", "FERMLIYAT", "ASSISTANTE", "AUTRE_MEDECIN"
+        ));
+        roleCombo.getSelectionModel().selectFirst();
+        PasswordField passwordField = new PasswordField();
+
+        var grid = new javafx.scene.layout.GridPane();
+        grid.setHgap(10); grid.setVgap(10);
+        grid.add(new Label("Nom:"), 0, 0); grid.add(nomField, 1, 0);
+        grid.add(new Label("Email:"), 0, 1); grid.add(emailField, 1, 1);
+        grid.add(new Label("Role:"), 0, 2); grid.add(roleCombo, 1, 2);
+        grid.add(new Label("Mot de passe:"), 0, 3); grid.add(passwordField, 1, 3);
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(btn -> {
+            if (btn == saveBtn) {
+                try {
+                    ApiService.createUser(nomField.getText(), emailField.getText(), roleCombo.getValue(), passwordField.getText());
+                    showAlert("Succes", "Utilisateur ajoute");
+                } catch (Exception e) {
+                    showAlert("Erreur", "Impossible d'ajouter: " + e.getMessage());
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+        loadUsers();
     }
 
     @FXML
     private void handleEdit(ActionEvent event) {
-        showAlert("Info", "Modification utilisateur (integration a finaliser)");
+        ApiService.UserDTO selected = userTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Selectionnez un utilisateur");
+            return;
+        }
+
+        Dialog<ApiService.UserDTO> dialog = new Dialog<>();
+        dialog.setTitle("Modifier Utilisateur");
+
+        ButtonType saveBtn = new ButtonType("Enregistrer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        TextField nomField = new TextField(selected.getNom());
+        TextField emailField = new TextField(selected.getEmail());
+        ComboBox<String> roleCombo = new ComboBox<>();
+        roleCombo.setItems(FXCollections.observableArrayList(
+                "MEDECIN_PRINCIPAL", "FERMLIYAT", "ASSISTANTE", "AUTRE_MEDECIN"
+        ));
+        roleCombo.setValue(selected.getRole());
+
+        var grid = new javafx.scene.layout.GridPane();
+        grid.setHgap(10); grid.setVgap(10);
+        grid.add(new Label("Nom:"), 0, 0); grid.add(nomField, 1, 0);
+        grid.add(new Label("Email:"), 0, 1); grid.add(emailField, 1, 1);
+        grid.add(new Label("Role:"), 0, 2); grid.add(roleCombo, 1, 2);
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(btn -> {
+            if (btn == saveBtn) {
+                try {
+                    ApiService.updateUser(selected.getId(), nomField.getText(), emailField.getText(), roleCombo.getValue(), selected.isEnabled());
+                    showAlert("Succes", "Utilisateur modifie");
+                } catch (Exception e) {
+                    showAlert("Erreur", "Impossible de modifier: " + e.getMessage());
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+        loadUsers();
     }
 
     @FXML
     private void handleResetPassword(ActionEvent event) {
-        showAlert("Info", "Reset mot de passe (integration a finaliser)");
+        ApiService.UserDTO selected = userTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Selectionnez un utilisateur");
+            return;
+        }
+
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Reset Mot de Passe");
+
+        ButtonType saveBtn = new ButtonType("Enregistrer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        PasswordField passwordField = new PasswordField();
+        var grid = new javafx.scene.layout.GridPane();
+        grid.setHgap(10); grid.setVgap(10);
+        grid.add(new Label("Nouveau mot de passe:"), 0, 0); grid.add(passwordField, 1, 0);
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(btn -> {
+            if (btn == saveBtn) return passwordField.getText();
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(newPassword -> {
+            if (newPassword.isEmpty()) {
+                showAlert("Erreur", "Mot de passe vide");
+                return;
+            }
+            try {
+                ApiService.resetUserPassword(selected.getId(), newPassword);
+                showAlert("Succes", "Mot de passe reinitialise");
+            } catch (Exception e) {
+                showAlert("Erreur", "Impossible de reinitialiser: " + e.getMessage());
+            }
+        });
     }
 
     @FXML
     private void handleDelete(ActionEvent event) {
-        showAlert("Info", "Suppression utilisateur (integration a finaliser)");
+        ApiService.UserDTO selected = userTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Selectionnez un utilisateur");
+            return;
+        }
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer " + selected.getNom() + " ?");
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            try {
+                ApiService.deleteUser(selected.getId());
+                showAlert("Succes", "Utilisateur supprime");
+                loadUsers();
+            } catch (Exception e) {
+                showAlert("Erreur", "Impossible de supprimer: " + e.getMessage());
+            }
+        }
     }
 
     @FXML

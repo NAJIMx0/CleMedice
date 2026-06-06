@@ -9,17 +9,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class ConsultationController {
 
     @FXML private Label patientLabel;
+    @FXML private Label dateLabel;
     @FXML private DatePicker datePicker;
     @FXML private TextArea descriptionField;
     @FXML private TextArea observationsField;
     @FXML private TextField casPatientField;
+    @FXML private Button ordonnanceButton;
 
     private RendezVousDTO currentRdv;
+    private Long savedConsultationId;
 
     @FXML
     public void initialize() {
@@ -28,12 +30,16 @@ public class ConsultationController {
 
     public void setRendezVous(RendezVousDTO rdv) {
         this.currentRdv = rdv;
+        this.savedConsultationId = null;
         if (rdv != null) {
-            patientLabel.setText(rdv.getPatientNom() + " " + rdv.getPatientPrenom());
+            patientLabel.setText(rdv.getPatientNom() + " " + (rdv.getPatientPrenom() != null ? rdv.getPatientPrenom() : ""));
             datePicker.setValue(rdv.getDate());
+            dateLabel.setText("Date RDV: " + (rdv.getDate() != null ? rdv.getDate().toString() : ""));
         } else {
-            patientLabel.setText("Selectionnez un rendez-vous depuis l'ecran RDV");
+            patientLabel.setText("Aucun rendez-vous selectionne");
+            dateLabel.setText("");
         }
+        ordonnanceButton.setDisable(true);
     }
 
     @FXML
@@ -49,7 +55,9 @@ public class ConsultationController {
             dto.setObservations(observationsField.getText());
             dto.setCasPatient(casPatientField.getText());
             dto.setDate(datePicker.getValue());
-            ApiService.createConsultation(dto);
+            ConsultationDTO result = ApiService.createConsultation(dto);
+            savedConsultationId = result.getId();
+            ordonnanceButton.setDisable(false);
             showAlert("Succes", "Consultation enregistree");
         } catch (Exception e) {
             showAlert("Erreur", "Impossible d'enregistrer: " + e.getMessage());
@@ -58,11 +66,11 @@ public class ConsultationController {
 
     @FXML
     private void handleOrdonnance(ActionEvent event) throws Exception {
-        if (currentRdv == null) {
+        if (savedConsultationId == null) {
             showAlert("Attention", "Enregistrez d'abord la consultation");
             return;
         }
-        MainApp.showOrdonnanceView();
+        MainApp.showOrdonnanceView(savedConsultationId, currentRdv);
     }
 
     @FXML
