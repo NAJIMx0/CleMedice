@@ -1,95 +1,474 @@
 # CleMedice - Gestion de Cabinet Medical
 
-Desktop medical cabinet management application with a Spring Boot REST API backend and JavaFX thick client.
+CleMedice is a full-stack desktop application for managing a medical practice. It provides tools for patient management, appointment scheduling, consultation tracking, prescription generation, medical certificates, and financial reporting. The backend is a Spring Boot REST API secured with JWT, and the frontend is a JavaFX desktop client.
+
+---
+
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Default Credentials](#default-credentials)
+- [Configuration](#configuration)
+- [Frontend Views](#frontend-views)
+- [API Endpoints](#api-endpoints)
+- [Security & Roles](#security--roles)
+- [Data Model](#data-model)
+- [Project Structure](#project-structure)
+- [Building for Production](#building-for-production)
+- [Switching to MySQL](#switching-to-mysql)
+
+---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Backend | Spring Boot 3.2.5, Java 21 |
-| Security | Spring Security + JWT (jjwt 0.12.5) |
-| ORM | Spring Data JPA / Hibernate |
-| Database (dev) | H2 file-based (`./data/clemedice`) |
-| Database (prod) | MySQL |
-| PDF | iText 8.0.4 |
-| Excel | Apache POI 5.2.5 |
-| Frontend | JavaFX 21.0.2, FXML |
-| Build | Maven |
+| Layer | Technology | Version |
+|---|---|---|
+| Backend Framework | Spring Boot | 3.2.5 |
+| Backend Language | Java | 21 |
+| Security | Spring Security + JWT (jjwt) | 0.12.5 |
+| ORM | Spring Data JPA / Hibernate | — |
+| Database (Development) | H2 (file-based) | — |
+| Database (Production) | MySQL (via mysql-connector-j) | — |
+| PDF Generation | iText Core | 8.0.4 |
+| Excel Export | Apache POI (ooxml) | 5.2.5 |
+| Validation | Jakarta Validation (Hibernate Validator) | — |
+| Build Tool | Maven | — |
+| Frontend Framework | JavaFX | 21.0.2 |
+| Frontend Language | Java | 17 |
+| FXML Parsing | javafx-fxml | 21.0.2 |
+| HTTP Client | `java.net.http.HttpClient` | Java 11+ |
+| JSON Processing | Jackson (databind + jsr310) | 2.17.0 |
+
+---
+
+## Architecture
+
+The application follows a **client-server architecture**:
+
+```
++--------------------+          HTTP/JSON           +-------------------+
+|                    |  <========================>  |                   |
+|   JavaFX Client    |       JWT Bearer Auth        |  Spring Boot API  |
+|   (Desktop App)    |                              |  (REST Backend)   |
+|                    |                              |                   |
++--------------------+                              +--------+----------+
+                                                             |
+                                                     +-------v--------+
+                                                     |   Database     |
+                                                     |  (H2 / MySQL)  |
+                                                     +----------------+
+```
+
+The frontend communicates with the backend exclusively through RESTful HTTP endpoints. Authentication is stateless using JSON Web Tokens. No sensitive logic is duplicated on the client.
+
+---
 
 ## Prerequisites
 
-- Java 21+ (backend) & Java 17+ (frontend)
-- Maven 3+
+- **Java JDK 21+** (required for the backend; Java 17 minimum for the frontend)
+- **Maven 3.8+**
+- A terminal or IDE (IntelliJ IDEA recommended)
+
+Verify installations:
+
+```bash
+java -version
+mvn -version
+```
+
+---
 
 ## Quick Start
 
-### 1. Backend
+### 1. Start the Backend
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-Runs on `http://localhost:8080`. H2 console at `/h2-console`.
+The backend starts on **`http://localhost:8080`**. The H2 database console is available at **`http://localhost:8080/h2-console`** (JDBC URL: `jdbc:h2:file:./data/clemedice`, user: `sa`, password: empty).
 
-Default credentials seeded on first startup: `admin@clemedice.com` / `admin123`
+### 2. Start the Frontend
 
-### 2. Frontend
+Open a **second terminal** and run:
 
 ```bash
 cd frontend
 mvn javafx:run
 ```
 
-Launches the JavaFX desktop client.
+The JavaFX application window opens at the login screen.
+
+### 3. Log In
+
+Use the default admin account (see below).
+
+---
+
+## Default Credentials
+
+On the first startup, the backend automatically seeds a default administrator user:
+
+| Email | Password | Role |
+|---|---|---|
+| `admin@clemedice.com` | `admin123` | `MEDECIN_PRINCIPAL` |
+
+Additional users can be created through the frontend (Users section, visible only to `MEDECIN_PRINCIPAL` role).
+
+---
+
+## Configuration
+
+All backend configuration is in `backend/src/main/resources/application.properties`:
+
+```properties
+# Server
+server.port=8080
+spring.application.name=clemedice-backend
+
+# Database (H2 for development)
+spring.datasource.url=jdbc:h2:file:./data/clemedice;DB_CLOSE_ON_EXIT=FALSE
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# JPA / Hibernate
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# H2 Console
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+# JWT
+jwt.secret=CleMedice2026SecretKeyForJWTTokenGenerationMustBe256BitsLong!
+jwt.expiration=86400000
+
+# File Upload
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+```
+
+The frontend API base URL is configured in `frontend/src/main/java/com/cabinet/ui/service/ApiService.java` (line 18, defaults to `http://localhost:8080/api`).
+
+---
+
+## Frontend Views
+
+| View | FXML File | Controller | Description |
+|---|---|---|---|
+| **Login** | `LoginView.fxml` | `LoginController` | Email/password authentication, retrieves JWT token |
+| **Dashboard** | `DashboardView.fxml` | `DashboardController` | Main navigation hub with role-based button visibility |
+| **Patients** | `PatientsView.fxml` | `PatientsController` | CRUD table with search, inline dialogs for add/edit |
+| **Rendez-vous** | `RendezVousView.fxml` | `RendezVousController` | Appointment management with date filtering |
+| **Consultation** | `ConsultationView.fxml` | `ConsultationController` | Consultation notes linked to a rendez-vous |
+| **Ordonnance** | `OrdonnanceView.fxml` | `OrdonnanceController` | Prescription builder with medicament line items |
+| **Attestation** | `AttestationView.fxml` | `AttestationController` | Medical certificate generation |
+| **Finance** | `FinanceView.fxml` | `FinanceController` | Monthly/annual financial summary dashboard |
+| **Users** | `UsersView.fxml` | `UsersController` | User management (Principal only) |
+
+The frontend uses Java's built-in `java.net.http.HttpClient` for all API calls, with the JWT token stored statically and attached to every request as `Authorization: Bearer <token>`.
+
+---
 
 ## API Endpoints
 
-| Method | Path | Description |
+### Authentication
+
+| Method | Path | Description | Auth |
+|---|---|---|---|
+| POST | `/api/auth/login` | Authenticate user, returns JWT | No |
+
+### Patients
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| GET | `/api/patients` | List all patients | All |
+| GET | `/api/patients/{id}` | Get patient by ID | All |
+| GET | `/api/patients/search?keyword=` | Search by name or CIN | All |
+| POST | `/api/patients` | Create a patient | MEDECIN_PRINCIPAL, FERMLIYAT |
+| PUT | `/api/patients/{id}` | Update a patient | MEDECIN_PRINCIPAL, FERMLIYAT |
+| DELETE | `/api/patients/{id}` | Delete a patient | MEDECIN_PRINCIPAL |
+
+### Rendez-vous
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| GET | `/api/rendezvous` | List all appointments | All |
+| GET | `/api/rendezvous/{id}` | Get appointment by ID | All |
+| GET | `/api/rendezvous/date?date=` | Get appointments by date | All |
+| GET | `/api/rendezvous/period?start=&end=` | Get appointments in date range | All |
+| POST | `/api/rendezvous` | Create an appointment | All |
+| PUT | `/api/rendezvous/{id}/statut?statut=` | Update appointment status | All |
+| DELETE | `/api/rendezvous/{id}` | Delete an appointment | MEDECIN_PRINCIPAL |
+
+### Consultations
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| GET | `/api/consultations` | List all consultations | All |
+| GET | `/api/consultations/{id}` | Get consultation by ID | All |
+| GET | `/api/consultations/rendezvous/{rdvId}` | Get consultation by rendez-vous | All |
+| POST | `/api/consultations` | Create a consultation | All |
+| PUT | `/api/consultations/{id}` | Update a consultation | All |
+
+### Ordonnances (Prescriptions)
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| GET | `/api/ordonnances` | List all prescriptions | All |
+| GET | `/api/ordonnances/{id}` | Get prescription by ID | All |
+| POST | `/api/ordonnances` | Create prescription with medicaments | All |
+| DELETE | `/api/ordonnances/{id}` | Delete prescription | MEDECIN_PRINCIPAL |
+| GET | `/api/ordonnances/{id}/pdf` | Download prescription as PDF | All |
+
+### Attestations (Certificates)
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| POST | `/api/attestations/generate` | Generate medical certificate PDF | All |
+
+### Finance / Payments
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| GET | `/api/finance` | List all payments | MEDECIN_PRINCIPAL |
+| GET | `/api/finance/{id}` | Get payment by ID | MEDECIN_PRINCIPAL |
+| POST | `/api/finance` | Create a payment | MEDECIN_PRINCIPAL |
+| DELETE | `/api/finance/{id}` | Delete a payment | MEDECIN_PRINCIPAL |
+| GET | `/api/finance/summary?annee=&mois=` | Get monthly/yearly summary | MEDECIN_PRINCIPAL |
+| GET | `/api/finance/period?start=&end=` | Get payments by date range | MEDECIN_PRINCIPAL |
+
+### Users
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| GET | `/api/users` | List all users | MEDECIN_PRINCIPAL |
+| POST | `/api/users` | Create a user | MEDECIN_PRINCIPAL |
+| PUT | `/api/users/{id}` | Update a user | MEDECIN_PRINCIPAL |
+| PUT | `/api/users/{id}/reset-password` | Reset user password | MEDECIN_PRINCIPAL |
+| DELETE | `/api/users/{id}` | Delete a user | MEDECIN_PRINCIPAL |
+
+### Export
+
+| Method | Path | Description | Roles |
+|---|---|---|---|
+| GET | `/api/export/patients` | Export patients to Excel (.xlsx) | MEDECIN_PRINCIPAL, FERMLIYAT |
+| GET | `/api/export/rendezvous?start=&end=` | Export appointments to Excel | MEDECIN_PRINCIPAL, FERMLIYAT |
+| GET | `/api/export/finance?start=&end=` | Export finance data to Excel | MEDECIN_PRINCIPAL, FERMLIYAT |
+
+---
+
+## Security & Roles
+
+The application defines four roles with graduated permissions:
+
+| Role | Permissions |
+|---|---|
+| **MEDECIN_PRINCIPAL** | Full access — all CRUD operations, user management, finance, exports |
+| **FERMLIYAT** | Patient and appointment management, exports (no finance or user management) |
+| **ASSISTANTE** | Read-only access to patients and appointments, can update appointment status |
+| **AUTRE_MEDECIN** | Consultations, prescriptions, and medical certificates |
+
+Authentication flow:
+1. Client sends `POST /api/auth/login` with email + password
+2. Server validates credentials via `BCryptPasswordEncoder`
+3. Server generates a JWT containing the user's email and role (signed with HMAC-SHA256)
+4. Client stores the JWT and sends it as `Authorization: Bearer <token>` on all subsequent requests
+5. `JwtAuthenticationFilter` intercepts each request, validates the token, and sets the security context
+6. Role-based access is enforced at the endpoint level via `.hasRole()` / `.hasAnyRole()`
+
+---
+
+## Data Model
+
+### Users
+| Field | Type | Notes |
 |---|---|---|
-| POST | `/api/auth/login` | Login, returns JWT |
-| GET/POST/PUT/DELETE | `/api/patients[/{id}]` | Patient CRUD |
-| GET/POST/PUT/DELETE | `/api/rendezvous[/{id}]` | Appointment CRUD |
-| GET/POST/PUT | `/api/consultations[/{id}]` | Consultation CRUD |
-| GET/POST/DELETE | `/api/ordonnances[/{id}]` | Prescription CRUD |
-| GET | `/api/ordonnances/{id}/pdf` | Download prescription PDF |
-| POST | `/api/attestations/generate` | Generate medical certificate PDF |
-| GET/POST/DELETE | `/api/finance[/{id}]` | Payment CRUD |
-| GET | `/api/finance/summary` | Monthly/annual finance summary |
-| GET/POST/PUT/DELETE | `/api/users[/{id}]` | User management (admin) |
-| PUT | `/api/users/{id}/reset-password` | Reset user password |
-| GET | `/api/export/patients` | Export patients to Excel |
-| GET | `/api/export/rendezvous` | Export appointments to Excel |
-| GET | `/api/export/finance` | Export finance to Excel |
+| id | Long | Auto-generated |
+| nom | String | User's display name |
+| email | String | Unique, used as login |
+| password | String | BCrypt-encoded |
+| role | Enum | MEDECIN_PRINCIPAL, FERMLIYAT, ASSISTANTE, AUTRE_MEDECIN |
+| enabled | Boolean | Account active/inactive |
 
-## Roles
+### Patients
+| Field | Type | Notes |
+|---|---|---|
+| id | Long | Auto-generated |
+| nom | String | Last name |
+| prenom | String | First name |
+| cin | String | Unique national ID |
+| telephone | String | Phone number |
+| dateNaissance | LocalDate | Date of birth |
+| adresse | String | Address |
+| createdAt | LocalDateTime | Auto-set on creation |
 
-- `MEDECIN_PRINCIPAL` — full access
-- `FERMLIYAT` — patients, appointments, export
-- `ASSISTANTE` — read-only + status updates
-- `AUTRE_MEDECIN` — consultations, prescriptions, certificates
+### Rendez-vous
+| Field | Type | Notes |
+|---|---|---|
+| id | Long | Auto-generated |
+| patient | ManyToOne | Link to Patient |
+| medecin | ManyToOne | Link to User |
+| date | LocalDate | Appointment date |
+| heure | LocalTime | Appointment time |
+| topic | String | Reason for visit |
+| statut | Enum | PLANIFIE, EFFECTUE, ANNULE |
+
+### Consultation Details
+| Field | Type | Notes |
+|---|---|---|
+| id | Long | Auto-generated |
+| rendezVous | OneToOne | Linked appointment |
+| description | Text | Consultation notes |
+| observations | Text | Doctor's observations |
+| casPatient | String | Patient case summary |
+| date | LocalDate | Consultation date |
+
+### Ordonnance / Medicament
+| Field | Type | Notes |
+|---|---|---|
+| id (Ordonnance) | Long | Auto-generated |
+| consultation | ManyToOne | Linked consultation |
+| casPatient | String | Patient case |
+| date | LocalDate | Prescription date |
+| medicaments | OneToMany | List of prescribed medications |
+
+Each **Medicament** has: nom, dosage, duree, instructions.
+
+### Paiement
+| Field | Type | Notes |
+|---|---|---|
+| id | Long | Auto-generated |
+| rendezVous | OneToOne | Linked appointment |
+| montant | BigDecimal | Amount |
+| date | LocalDate | Payment date |
+| modePaiement | Enum | ESPECES, CHEQUE, VIREMENT, CARTE_BANCAIRE |
+| statut | String | Payment status |
+| notes | String | Optional notes |
+
+---
 
 ## Project Structure
 
 ```
 CleMedice/
-  backend/              -- Spring Boot REST API
-    src/main/java/com/cabinet/
-      config/           -- Security, JWT, exception handler, data initializer
-      controller/       -- REST controllers
-      service/          -- Business logic
-      repository/       -- JPA repositories
-      model/            -- Entities and enums
-      dto/              -- Data transfer objects
-      util/             -- PDF generator, Excel exporter
-  frontend/             -- JavaFX client
-    src/main/java/com/cabinet/ui/
-      MainApp.java      -- JavaFX entry point
-      controller/       -- FXML controllers
-      service/          -- ApiService (HTTP client)
-      model/            -- DTOs
-    src/main/resources/com/cabinet/ui/view/
-      *.fxml            -- FXML layouts
-      styles.css
-  data/                 -- H2 dev database
+├── backend/                          # Spring Boot REST API
+│   ├── pom.xml
+│   └── src/main/java/com/cabinet/
+│       ├── CleMediceApplication.java # Entry point
+│       ├── config/
+│       │   ├── SecurityConfig.java           # Spring Security + CORS + role rules
+│       │   ├── JwtTokenProvider.java         # JWT generation & validation
+│       │   ├── JwtAuthenticationFilter.java  # Request filter for JWT
+│       │   ├── GlobalExceptionHandler.java   # @RestControllerAdvice
+│       │   └── DataInitializer.java          # Seeds default admin user
+│       ├── controller/
+│       │   ├── AuthController.java
+│       │   ├── PatientController.java
+│       │   ├── RendezVousController.java
+│       │   ├── ConsultationController.java
+│       │   ├── OrdonnanceController.java
+│       │   ├── AttestationController.java
+│       │   ├── PaiementController.java
+│       │   ├── UserController.java
+│       │   └── ExportController.java
+│       ├── service/
+│       │   ├── AuthService.java
+│       │   ├── PatientService.java
+│       │   ├── RendezVousService.java
+│       │   ├── ConsultationService.java
+│       │   ├── OrdonnanceService.java
+│       │   ├── PaiementService.java
+│       │   └── UserService.java
+│       ├── repository/               # JPA repositories
+│       ├── model/                     # Entities + enums
+│       ├── dto/                       # Request/response DTOs
+│       └── util/
+│           ├── PdfGenerator.java      # iText-based PDF generation
+│           └── ExcelExporter.java     # Apache POI Excel export
+│
+├── frontend/                         # JavaFX Desktop Client
+│   ├── pom.xml
+│   └── src/main/java/com/cabinet/ui/
+│       ├── MainApp.java              # JavaFX application entry point
+│       ├── controller/
+│       │   ├── LoginController.java
+│       │   ├── DashboardController.java
+│       │   ├── PatientsController.java
+│       │   ├── RendezVousController.java
+│       │   ├── ConsultationController.java
+│       │   ├── OrdonnanceController.java
+│       │   ├── AttestationController.java
+│       │   ├── FinanceController.java
+│       │   └── UsersController.java
+│       ├── service/
+│       │   └── ApiService.java       # HTTP client + token management
+│       └── model/
+│           ├── LoginResponse.java
+│           ├── PatientDTO.java
+│           ├── RendezVousDTO.java
+│           ├── ConsultationDTO.java
+│           └── FinanceSummaryDTO.java
+│
+├── data/                            # H2 database file (dev, gitignored)
+├── TECHNICAL_CONCEPTION.md          # Architecture document
+└── README.md
 ```
+
+---
+
+## Building for Production
+
+### Backend
+
+```bash
+cd backend
+mvn clean package -DskipTests
+java -jar target/clemedice-backend-1.0.0.jar
+```
+
+### Frontend
+
+```bash
+cd frontend
+mvn clean package
+```
+
+The built JAR with dependencies will be in `frontend/target/`. Run it with:
+
+```bash
+java -jar target/clemedice-frontend-1.0.0.jar
+```
+
+---
+
+## Switching to MySQL
+
+Edit `backend/src/main/resources/application.properties`:
+
+```properties
+# Comment out H2
+# spring.datasource.url=jdbc:h2:file:./data/clemedice;DB_CLOSE_ON_EXIT=FALSE
+# spring.datasource.driver-class-name=org.h2.Driver
+# spring.h2.console.enabled=true
+
+# Uncomment MySQL
+spring.datasource.url=jdbc:mysql://localhost:3306/clemedice?useSSL=false&serverTimezone=UTC
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+```
+
+Create the database manually:
+
+```sql
+CREATE DATABASE clemedice;
+```
+
+Spring Boot will create the tables automatically (`ddl-auto=update`).
