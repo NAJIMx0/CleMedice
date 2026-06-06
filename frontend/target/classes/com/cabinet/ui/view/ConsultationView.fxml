@@ -8,13 +8,13 @@
     <top>
         <VBox style="-fx-background-color: #2c3e50; -fx-padding: 10;">
             <HBox alignment="CENTER_LEFT" spacing="15">
-                <Button text="< Retour" onAction="#handleBack" style="-fx-background-color: #34495e; -fx-text-fill: white;"/>
+                <Button text="&lt; Retour" onAction="#handleBack" style="-fx-background-color: #34495e; -fx-text-fill: white;"/>
                 <Label text="Consultation" textFill="WHITE" style="-fx-font-weight: bold;"><font><Font size="20"/></font></Label>
             </HBox>
         </VBox>
     </top>
     <center>
-        <VBox spacing="15" padding="20">
+        <VBox spacing="15" style="-fx-padding: 20;">
             <HBox spacing="10">
                 <Label text="Patient:" style="-fx-font-weight: bold;"/>
                 <Label fx:id="patientLabel"/>

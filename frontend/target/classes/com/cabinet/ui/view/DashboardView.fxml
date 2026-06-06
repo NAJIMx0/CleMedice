@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cabinet.ui.controller.DashboardController">
     <top>
@@ -21,7 +22,8 @@
         </VBox>
     </top>
     <center>
-        <GridPane hgap="20" vgap="20" alignment="CENTER" padding="30">
+        <GridPane hgap="20" vgap="20" alignment="CENTER">
+            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
             <Button text="Patients" onAction="#handlePatients" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10;"/>
             <Button text="Rendez-vous" onAction="#handleRendezVous" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="1"/>
             <Button text="Consultations" onAction="#handleConsultations" prefWidth="200" prefHeight="100" style="-fx-font-size: 16; -fx-background-color: #9b59b6; -fx-text-fill: white; -fx-background-radius: 10;" GridPane.columnIndex="2"/>

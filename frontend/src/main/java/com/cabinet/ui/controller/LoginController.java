@@ -20,7 +20,7 @@ public class LoginController {
         String password = passwordField.getText().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            showError("Veuillez remplir tous les champs");
+            showError("Veuillez remplir tous les champs!!");
             return;
         }
 
