@@ -4,28 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c903a4b1-a440-4a02-b93a-5f980f4608c3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/data/clemedice.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/data/clemedice.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/AttestationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/AttestationView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/ConsultationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/ConsultationView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/DashboardView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/DashboardView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/FinanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/FinanceView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/OrdonnanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/OrdonnanceView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/PatientsView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/PatientsView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/RendezVousView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/RendezVousView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/UsersView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/UsersView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/AttestationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/AttestationView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/ConsultationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/ConsultationView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/DashboardView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/DashboardView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/FinanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/FinanceView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/OrdonnanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/OrdonnanceView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/PatientsView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/PatientsView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/RendezVousView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/RendezVousView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/UsersView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/UsersView.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="c903a4b1-a440-4a02-b93a-5f980f4608c3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,7 +87,7 @@
       <workItem from="1780268886646" duration="509000" />
       <workItem from="1780410754321" duration="16000" />
       <workItem from="1780415791187" duration="659000" />
-      <workItem from="1780759652268" duration="2291000" />
+      <workItem from="1780759652268" duration="2623000" />
     </task>
     <servers />
   </component>
