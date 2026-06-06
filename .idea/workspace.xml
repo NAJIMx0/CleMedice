@@ -4,7 +4,50 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c903a4b1-a440-4a02-b93a-5f980f4608c3" name="Changes" comment="" />
+    <list default="true" id="c903a4b1-a440-4a02-b93a-5f980f4608c3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/data/clemedice.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/data/clemedice.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/MainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/AttestationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/AttestationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/ConsultationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/ConsultationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/FinanceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/FinanceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/OrdonnanceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/OrdonnanceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/PatientsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/PatientsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/RendezVousController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/RendezVousController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/UsersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/controller/UsersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/model/PatientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/model/PatientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/model/RendezVousDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/model/RendezVousDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/service/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/com/cabinet/ui/service/ApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/AttestationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/AttestationView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/ConsultationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/ConsultationView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/DashboardView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/DashboardView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/FinanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/FinanceView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/OrdonnanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/OrdonnanceView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/PatientsView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/PatientsView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/RendezVousView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/RendezVousView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/UsersView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/UsersView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/AttestationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/AttestationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/ConsultationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/ConsultationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/DashboardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/DashboardController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/FinanceController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/FinanceController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/OrdonnanceController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/OrdonnanceController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/PatientsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/PatientsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/RendezVousController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/RendezVousController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/UsersController.class" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/controller/UsersController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/AttestationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/AttestationView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/ConsultationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/ConsultationView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/DashboardView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/DashboardView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/FinanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/FinanceView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/OrdonnanceView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/OrdonnanceView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/PatientsView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/PatientsView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/RendezVousView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/RendezVousView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/UsersView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/UsersView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,26 +77,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.CleMediceApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.CleMediceApplication.executor": "Debug",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="CleMediceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="clemedice-backend" />
@@ -87,7 +133,7 @@
       <workItem from="1780268886646" duration="509000" />
       <workItem from="1780410754321" duration="16000" />
       <workItem from="1780415791187" duration="659000" />
-      <workItem from="1780759652268" duration="2623000" />
+      <workItem from="1780759652268" duration="5646000" />
     </task>
     <servers />
   </component>

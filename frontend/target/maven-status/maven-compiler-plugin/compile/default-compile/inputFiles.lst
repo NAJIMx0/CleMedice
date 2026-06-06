@@ -11,6 +11,10 @@ C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\MainApp
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\ConsultationDTO.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\FinanceSummaryDTO.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\LoginResponse.java
+C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\MedicamentDTO.java
+C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\OrdonnanceDTO.java
+C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\OrdonnanceResultDTO.java
+C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\PaiementDTO.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\PatientDTO.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\RendezVousDTO.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\service\ApiService.java
