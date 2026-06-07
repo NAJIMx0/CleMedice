@@ -17,13 +17,16 @@ com\cabinet\ui\model\OrdonnanceDTO.class
 com\cabinet\ui\service\ApiService$1.class
 com\cabinet\ui\controller\RendezVousController$1.class
 com\cabinet\ui\model\RendezVousDTO.class
+com\cabinet\ui\model\RendezVousRequest$Builder.class
 com\cabinet\ui\service\ApiService.class
 com\cabinet\ui\controller\FinanceController$2.class
 com\cabinet\ui\controller\DashboardController.class
 com\cabinet\ui\model\PaiementDTO.class
 com\cabinet\ui\model\ConsultationDTO.class
 com\cabinet\ui\service\ApiService$3.class
+com\cabinet\ui\config\AppConfig.class
 com\cabinet\ui\model\PaiementDTO$RendezVousInfo.class
+com\cabinet\ui\model\RendezVousRequest.class
 com\cabinet\ui\controller\AttestationController.class
 com\cabinet\ui\service\ApiService$5.class
 com\cabinet\ui\controller\RendezVousController.class

@@ -1,0 +1,900 @@
+================================================================================
+  CleMedice — Gestion de Cabinet Medical
+  COMPLETE TESTING GUIDE
+  Version 1.0
+================================================================================
+
+  This document provides step-by-step instructions to test every feature of the
+  CleMedice medical cabinet management application. It is intended for academic
+  reporting and quality assurance purposes.
+
+  Table of Contents
+  ─────────────────
+  1.  How to Start the Project
+  2.  How to Run the Unit Tests
+  3.  Manual Testing: Login
+  4.  Manual Testing: Patients
+  5.  Manual Testing: Rendez-Vous
+  6.  Manual Testing: Consultation
+  7.  Manual Testing: Ordonnance
+  8.  Manual Testing: Finance
+  9.  Manual Testing: Attestation
+  10. Manual Testing: User Management
+  11. Testing Design Patterns (for Academic Report)
+  12. Verifying Data in H2 Console
+  13. Common Errors and Fixes
+
+
+================================================================================
+  SECTION 1 — HOW TO START THE PROJECT
+================================================================================
+
+  Prerequisites
+  ─────────────
+  - Java JDK 21+ installed
+  - Maven 3.8+ installed
+  - A terminal (Command Prompt, PowerShell, or IntelliJ terminal)
+
+  Step 1: Start the Backend
+  ─────────────────────────
+  1. Open a terminal.
+  2. Navigate to the backend folder:
+       cd backend
+  3. Run the Spring Boot backend:
+       mvn spring-boot:run
+  4. Wait for the console output to show:
+       "Started CleMediceApplication in XX.XXX seconds"
+       "=== Seed complete: 20 patients, 5 users, 10 rdv, 4 paiements ==="
+     This means the database has been initialised with test data.
+
+  Step 2: Verify Backend is Running
+  ──────────────────────────────────
+  1. Open a web browser.
+  2. Go to: http://localhost:8080/h2-console
+  3. On the login page, enter:
+       JDBC URL: jdbc:h2:file:./data/clemedice
+       Username: sa
+       Password: (leave empty)
+  4. Click Connect.
+  5. If you see the H2 database console with tables listed (PATIENTS, USERS,
+     RENDEZ_VOUS, CONSULTATION_DETAILS, ORDONNANCE, MEDICAMENT, PAIEMENTS),
+     the backend is running correctly.
+
+  Step 3: Start the Frontend
+  ───────────────────────────
+  1. Open a SECOND terminal (keep the backend terminal running).
+  2. Navigate to the frontend folder:
+       cd frontend
+  3. Run the JavaFX application:
+       mvn javafx:run
+  4. Wait for the JavaFX window to open (may take 10-30 seconds on first run).
+
+  Step 4: What to Expect on Screen
+  ─────────────────────────────────
+  - A login window appears with:
+    - "CleMedice" title
+    - Email field
+    - Password field
+    - "Se connecter" button
+  - Background has the application's styled colour scheme.
+  - If the login window appears, the frontend is connected and ready.
+
+
+================================================================================
+  SECTION 2 — HOW TO RUN THE UNIT TESTS
+================================================================================
+
+  Step 1: Stop the Backend (important)
+  ─────────────────────────────────────
+  The integration tests need to start their own embedded server. If the backend
+  is already running on port 8080, the tests will fail with "address already in
+  use". Close the backend terminal, or press Ctrl+C in the backend terminal.
+
+  Step 2: Run All Tests
+  ─────────────────────
+  1. In a terminal, navigate to the backend folder:
+       cd backend
+  2. Run the tests:
+       mvn test
+  3. Maven will compile test classes and execute them.
+
+  What Each Test Class Tests
+  ──────────────────────────
+
+  A) PatientServiceTest (6 tests)
+     Location: backend/src/test/java/com/cabinet/service/PatientServiceTest.java
+     Tests the PatientService business logic in isolation using Mockito.
+     Repository calls are mocked — no real database is used.
+     Tests include: listing all patients, finding by ID, handling "not found",
+     creating a patient, deleting a patient, and searching by keyword.
+
+  B) DocumentFactoryTest (5 tests)
+     Location: backend/src/test/java/com/cabinet/factory/DocumentFactoryTest.java
+     Tests the Factory design pattern implementation.
+     Verifies that each DocumentType (ORDONNANCE, ATTESTATION,
+     CERTIFICAT_ARRET_TRAVAIL, CERTIFICAT_APTITUDE) produces a document map
+     with the correct keys and header text. Also verifies that every document
+     always contains a non-empty date field.
+
+  C) SingletonPatternTest (2 tests)
+     Location: backend/src/test/java/com/cabinet/factory/SingletonPatternTest.java
+     Demonstrates the Singleton concept by proving that calling
+     DocumentFactory.createDocument() with identical inputs produces
+     consistent output. Also verifies all four document types are creatable
+     without throwing exceptions.
+
+  D) PatientControllerIntegrationTest (5 tests)
+     Location: backend/src/test/java/com/cabinet/controller/
+               PatientControllerIntegrationTest.java
+     Tests real HTTP endpoints against an embedded Spring Boot server with an
+     in-memory H2 database. Tests include: GET /api/patients with and without
+     authentication, POST /api/patients to create a new patient,
+     GET /api/patients/search, and login with wrong password returning 401.
+
+  What a PASS Looks Like
+  ──────────────────────
+  At the end of the test run, you will see:
+
+      [INFO] Results:
+      [INFO]
+      [INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0
+      [INFO]
+      [INFO] -----------------------------------------------------------------
+      [INFO] BUILD SUCCESS
+      [INFO] -----------------------------------------------------------------
+
+  The number "18" is the total test count. All tests must show 0 Failures and
+  0 Errors for a clean pass.
+
+  What a FAIL Looks Like
+  ──────────────────────
+  A failure will show:
+
+      [INFO] Tests run: 18, Failures: 1, Errors: 0, Skipped: 0
+      [INFO]
+      [INFO] -----------------------------------------------------------------
+      [INFO] BUILD FAILURE
+      [INFO] -----------------------------------------------------------------
+
+  A detailed stack trace will appear showing which test method failed and at
+  which assertion. Check:
+    - Is the backend already running on port 8080?
+    - Are the test source files in the correct packages?
+    - Does DocumentFactory.java exist in backend/src/main/java/com/cabinet/factory/?
+    - Are there any import errors in the test files?
+
+
+================================================================================
+  SECTION 3 — MANUAL TESTING: LOGIN
+================================================================================
+
+  Test 1 — Login as Admin
+  ────────────────────────
+  Steps:
+    1. On the login screen, enter:
+         Email:    admin@clemedice.com
+         Password: admin123
+    2. Click "Se connecter".
+  Expected Result:
+    - Dashboard appears with cards for: Patients, Rendez-vous, Consultations,
+      Ordonnances, Attestations, Paiements/Finance, and Utilisateurs (Users).
+    - Medecin name "admin" displayed at top of dashboard.
+    - Total of 7 navigation cards visible.
+
+  Test 2 — Login as Dr. Najim (FERMLIYAT)
+  ────────────────────────────────────────
+  Steps:
+    1. Log out (close window or restart frontend).
+    2. Enter:
+         Email:    najim@clemedice.com
+         Password: najim123
+    3. Click "Se connecter".
+  Expected Result:
+    - Dashboard appears.
+    - Paiements/Finance and Utilisateurs cards are NOT visible.
+    - Only patients, RDV, consultation, ordonnance and attestation cards shown.
+
+  Test 3 — Login as Adil (ASSISTANTE)
+  ────────────────────────────────────
+  Steps:
+    1. Log out.
+    2. Enter:
+         Email:    adil@clemedice.com
+         Password: adil123
+    3. Click "Se connecter".
+  Expected Result:
+    - Dashboard appears with limited cards.
+    - Finance and Utilisateurs buttons NOT visible.
+    - Most actions are read-only or limited.
+
+  Test 4 — Wrong Password
+  ────────────────────────
+  Steps:
+    1. Enter:
+         Email:    admin@clemedice.com
+         Password: wrongpassword
+    2. Click "Se connecter".
+  Expected Result:
+    - Red error message appears near the login button.
+    - Application stays on the login screen.
+    - No dashboard is shown.
+
+  Test 5 — Empty Fields
+  ──────────────────────
+  Steps:
+    1. Leave both email and password fields empty.
+    2. Click "Se connecter".
+  Expected Result:
+    - Error message "Veuillez remplir tous les champs" appears.
+    - Application stays on the login screen.
+
+
+================================================================================
+  SECTION 4 — MANUAL TESTING: PATIENTS
+================================================================================
+
+  Test 1 — View All Patients
+  ───────────────────────────
+  Steps:
+    1. Log in as admin.
+    2. Click the "Patients" card on the dashboard.
+  Expected Result:
+    - A table loads showing 20 patients.
+    - Columns: Nom, Prenom, CIN, Telephone, Date Naissance, Adresse.
+    - Patients include Najim Badr Eddin, Adil Assoufi, Saad Akbib, etc.
+
+  Test 2 — Search Patient by Name
+  ────────────────────────────────
+  Steps:
+    1. In the search field above the table, type: Najim
+    2. Click "Rechercher" or press Enter.
+  Expected Result:
+    - Table filters to show only "Najim Badr Eddin".
+    - Only one row displayed.
+
+  Test 3 — Search by CIN
+  ───────────────────────
+  Steps:
+    1. In the search field, type: BK523890
+    2. Click "Rechercher".
+  Expected Result:
+    - Table shows "Houssam Bazza" with CIN BK523890.
+
+  Test 4 — Search with No Results
+  ────────────────────────────────
+  Steps:
+    1. In the search field, type: XXXXXX
+    2. Click "Rechercher".
+  Expected Result:
+    - Table shows no rows (empty).
+    - No error or crash occurs.
+
+  Test 5 — Add a New Patient
+  ───────────────────────────
+  Steps:
+    1. Click "Ajouter Patient".
+    2. In the dialog, fill in:
+         Nom:             Tester
+         Prenom:          Manual
+         CIN:             ZZ999999
+         Telephone:       0699999999
+         Date Naissance:  01/01/1990
+         Adresse:         Rue de test 123, Casablanca
+    3. Click "Enregistrer".
+  Expected Result:
+    - Dialog closes.
+    - Table refreshes showing the new patient.
+    - Search for "ZZ999999" confirms the patient was saved.
+
+  Test 6 — Edit a Patient
+  ────────────────────────
+  Steps:
+    1. Click on any patient row in the table to select it.
+    2. Click "Modifier".
+    3. In the dialog, change the telephone number to: 0611111111
+    4. Click "Enregistrer".
+  Expected Result:
+    - Dialog closes.
+    - Table refreshes and the telephone column shows the new value.
+
+  Test 7 — Delete a Patient
+  ──────────────────────────
+  Steps:
+    1. Click on any patient row to select it.
+    2. Click "Supprimer".
+    3. A confirmation dialog appears. Click "OK" or confirm.
+  Expected Result:
+    - Patient is removed from the table.
+    - The total patient count decreases by 1.
+
+
+================================================================================
+  SECTION 5 — MANUAL TESTING: RENDEZ-VOUS
+================================================================================
+
+  Test 1 — View Today's RDVs
+  ───────────────────────────
+  Steps:
+    1. Click "Rendez-vous" on the dashboard.
+    2. The DatePicker defaults to today's date.
+  Expected Result:
+    - Table shows RDVs planned for today (seeded data includes today's dates
+      for patients Mohsin, Saad, and Houssam).
+    - Columns: Patient, Medecin, Date, Heure, Topic, Statut.
+    - The Statut column shows coloured badges (green for PLANIFIE).
+
+  Test 2 — View Tomorrow's RDVs
+  ──────────────────────────────
+  Steps:
+    1. Change the DatePicker to tomorrow's date.
+  Expected Result:
+    - Table updates to show RDVs for tomorrow (seeded data includes
+      Najim Badr Eddin and Adil Assoufi for tomorrow).
+    - If no RDVs exist for that date, table is empty.
+
+  Test 3 — Status Badges
+  ───────────────────────
+  Steps:
+    1. Browse through multiple dates to see different RDV statuses.
+  Expected Result:
+    - PLANIFIE: green badge with white text.
+    - EFFECTUE: blue badge with white text.
+    - ANNULE:   red badge with white text.
+    - All three colours must be visually distinct and legible.
+
+  Test 4 — Create a New RDV
+  ──────────────────────────
+  Steps:
+    1. Click "Nouveau RDV".
+    2. In the dialog:
+         - Select a patient from the dropdown (shows "Nom Prenom (CIN)")
+         - Set date = tomorrow
+         - Set time = 11:00
+         - Topic = "Test RDV"
+    3. Click "Enregistrer".
+  Expected Result:
+    - Dialog closes.
+    - Select tomorrow's date in the DatePicker.
+    - The new RDV appears in the table.
+
+  Test 5 — Cancel an RDV
+  ───────────────────────
+  Steps:
+    1. Select a PLANIFIE RDV row.
+    2. Click "Annuler RDV".
+    3. Confirm the action.
+  Expected Result:
+    - The RDV's badge changes to red with "ANNULE" text.
+    - Refreshing (changing date and back) shows the status is persisted.
+
+  Test 6 — Open Consultation from RDV
+  ────────────────────────────────────
+  Steps:
+    1. Select any PLANIFIE or EFFECTUE RDV row.
+    2. Click "Effectuer Consultation".
+  Expected Result:
+    - The Consultation screen opens.
+    - The patient's name and RDV date are displayed at the top.
+
+
+================================================================================
+  SECTION 6 — MANUAL TESTING: CONSULTATION
+================================================================================
+
+  IMPORTANT: The Consultation screen can ONLY be accessed from the RDV screen
+  by selecting an RDV and clicking "Effectuer Consultation". There is no
+  standalone Consultation button on the Dashboard.
+
+  Test 1 — Consultation Screen Shows Correct Patient
+  ───────────────────────────────────────────────────
+  Steps:
+    1. From the RDV screen, select Najim Badr Eddin's RDV.
+    2. Click "Effectuer Consultation".
+  Expected Result:
+    - The consultation screen header shows "Patient: Najim Badr Eddin".
+    - The date field is pre-filled with the RDV's date.
+
+  Test 2 — Save Consultation
+  ───────────────────────────
+  Steps:
+    1. Fill in the consultation form:
+         Description:     Controle general satisfaisant
+         Observations:    Tension normale, poids stable
+         Cas Patient:     Patient en bonne sante
+    2. Click "Enregistrer Consultation".
+  Expected Result:
+    - A success alert dialog appears.
+    - The "Creer Ordonnance" button becomes enabled.
+
+  Test 3 — Creer Ordonnance Button Disabled Before Save
+  ──────────────────────────────────────────────────────
+  Steps:
+    1. Open a new consultation (from a different RDV).
+    2. Do NOT fill in any fields.
+  Expected Result:
+    - The "Creer Ordonnance" button is grayed out or disabled.
+    - It only becomes active after the consultation is saved.
+
+  Test 4 — Back to RDV
+  ─────────────────────
+  Steps:
+    1. Click "Retour" (back button).
+  Expected Result:
+    - Returns to the RDV screen.
+    - The date filter still shows the previously selected date.
+
+
+================================================================================
+  SECTION 7 — MANUAL TESTING: ORDONNANCE
+================================================================================
+
+  IMPORTANT: The Ordonnance screen can ONLY be accessed from the Consultation
+  screen after saving a consultation. There is no standalone Ordonnance button.
+
+  Test 1 — Ordonnance Screen Shows Patient
+  ─────────────────────────────────────────
+  Steps:
+    1. From a saved consultation, click "Creer Ordonnance".
+  Expected Result:
+    - The ordonnance screen opens.
+    - Patient name is visible in the top bar.
+
+  Test 2 — Add a Medicament
+  ──────────────────────────
+  Steps:
+    1. Click "Ajouter Medicament".
+    2. In the dialog, fill in:
+         Nom:           Paracetamol
+         Dosage:        500mg
+         Duree:         5 jours
+         Instructions:  1 comprime matin et soir
+    3. Click "Ajouter".
+  Expected Result:
+    - The medicament appears in the table below.
+    - Columns: Nom, Dosage, Duree, Instructions.
+
+  Test 3 — Add a Second Medicament
+  ─────────────────────────────────
+  Steps:
+    1. Click "Ajouter Medicament" again.
+    2. Fill in:
+         Nom:           Amoxicilline
+         Dosage:        1g
+         Duree:         7 jours
+         Instructions:  1 comprime 3 fois par jour
+    3. Click "Ajouter".
+  Expected Result:
+    - Both Paracetamol and Amoxicilline appear in the table.
+
+  Test 4 — Remove a Medicament
+  ─────────────────────────────
+  Steps:
+    1. Select a medicament row in the table.
+    2. Click "Retirer".
+  Expected Result:
+    - The selected medicament is removed from the table.
+    - The remaining medicament stays.
+
+  Test 5 — Save Ordonnance
+  ─────────────────────────
+  Steps:
+    1. Fill in "Cas Patient": Infection respiratoire
+    2. Click "Enregistrer".
+  Expected Result:
+    - Success alert appears.
+    - The "Generer PDF" button becomes enabled.
+
+  Test 6 — Generate PDF
+  ──────────────────────
+  Steps:
+    1. Click "Generer PDF".
+  Expected Result:
+    - The system's default PDF viewer opens (Adobe Acrobat, Microsoft Edge,
+      or your default PDF program).
+    - The PDF contains: patient name, medicament table (with dosage, duration,
+      instructions), date, and a signature line.
+    - Close the PDF viewer when done.
+
+  Test 7 — PDF Button Disabled Before Save
+  ─────────────────────────────────────────
+  Steps:
+    1. Open an ordonnance screen but do NOT click "Enregistrer".
+  Expected Result:
+    - The "Generer PDF" button is grayed out / disabled.
+    - It only becomes active after the ordonnance is saved.
+
+
+================================================================================
+  SECTION 8 — MANUAL TESTING: FINANCE
+================================================================================
+
+  Test 1 — View Finance Summary
+  ──────────────────────────────
+  Steps:
+    1. Log in as admin (admin@clemedice.com).
+    2. Click "Paiements" or "Finance" on the dashboard.
+  Expected Result:
+    - Summary cards show:
+      - "Total Mensuel" with amount in MAD
+      - "Total Annuel" with amount in MAD
+    - The seeded payments total 700 MAD (200 + 150 + 100 + 250).
+
+  Test 2 — View Payments Table
+  ─────────────────────────────
+  Expected Result:
+    - Table shows 4 seeded payments.
+    - Each row shows: patient name, amount, date, mode of payment.
+    - Payment modes may include: ESPECES, CHEQUE, VIREMENT, CARTE_BANCAIRE.
+
+  Test 3 — Filter by Month
+  ─────────────────────────
+  Steps:
+    1. Change the "Annee" and "Mois" fields.
+    2. Click "Actualiser".
+  Expected Result:
+    - Summary cards update.
+    - If no payments exist for the selected month, displays "0.00 MAD".
+
+  Test 4 — Add a New Payment
+  ───────────────────────────
+  Steps:
+    1. Click "Ajouter Paiement".
+    2. In the dialog:
+         - Select a RDV from the dropdown (pick a PLANIFIE one).
+         - Enter montant: 300
+         - Select mode: ESPECES
+         - Notes: "Consultation test"
+    3. Click "Enregistrer".
+  Expected Result:
+    - Payment appears in the table.
+    - Monthly and annual totals increase by 300 MAD.
+
+  Test 5 — Export to Excel
+  ─────────────────────────
+  Steps:
+    1. Click "Exporter Excel".
+    2. In the date range dialog:
+         - Start date: first day of current month
+         - End date: today
+    3. Click "OK".
+  Expected Result:
+    - Microsoft Excel (or your default spreadsheet application) opens.
+    - The spreadsheet contains rows of payment data with columns.
+    - Close Excel when done.
+
+  Test 6 — Finance Not Accessible for Non-Admin
+  ──────────────────────────────────────────────
+  Steps:
+    1. Log out.
+    2. Log in as najim@clemedice.com.
+  Expected Result:
+    - The Finance / Paiements card is NOT visible on the dashboard.
+    - Non-admin users cannot access financial data at all.
+
+
+================================================================================
+  SECTION 9 — MANUAL TESTING: ATTESTATION
+================================================================================
+
+  Test 1 — Select Patient from Dropdown
+  ──────────────────────────────────────
+  Steps:
+    1. Click "Attestations" on the dashboard.
+  Expected Result:
+    - A patient dropdown is shown listing all patients.
+    - Each entry shows "Nom Prenom (CIN)".
+
+  Test 2 — Generate Attestation PDF
+  ──────────────────────────────────
+  Steps:
+    1. Select patient "Houssam Bazza" from the dropdown.
+    2. In the content text area, type:
+         est apte a reprendre son activite professionnelle a compter du jour
+    3. Click "Generer PDF".
+  Expected Result:
+    - The system's default PDF viewer opens.
+    - The PDF contains: patient name (Houssam Bazza), content text, date,
+      and a signature line.
+    - Close the PDF viewer when done.
+
+  Test 3 — Empty Content Validation
+  ──────────────────────────────────
+  Steps:
+    1. Select a patient from the dropdown.
+    2. Leave the content text area empty.
+    3. Click "Generer PDF".
+  Expected Result:
+    - An alert appears: "Saisissez le contenu de l'attestation".
+    - No PDF is generated.
+
+  Test 4 — No Patient Selected
+  ─────────────────────────────
+  Steps:
+    1. Leave the dropdown empty (no patient selected).
+    2. Type some content in the text area.
+    3. Click "Generer PDF".
+  Expected Result:
+    - An alert appears: "Selectionnez un patient".
+    - No PDF is generated.
+
+
+================================================================================
+  SECTION 10 — MANUAL TESTING: USER MANAGEMENT
+================================================================================
+
+  NOTE: The "Utilisateurs" (Users) card is ONLY visible when logged in as
+  MEDECIN_PRINCIPAL (admin@clemedice.com).
+
+  Test 1 — View Users
+  ────────────────────
+  Steps:
+    1. Log in as admin.
+    2. Click "Utilisateurs" on the dashboard.
+  Expected Result:
+    - Table shows 5 users: admin, najim, adil, saad, houssam.
+    - Columns: Nom, Email, Role, Enabled.
+
+  Test 2 — Add a New User
+  ────────────────────────
+  Steps:
+    1. Click "Ajouter".
+    2. In the dialog, fill in:
+         Nom:      Nouveau Medecin
+         Email:    nouveau@clemedice.com
+         Role:     AUTRE_MEDECIN
+         Password: nouveau123
+    3. Click "Enregistrer".
+  Expected Result:
+    - Dialog closes.
+    - The new user appears in the table.
+
+  Test 3 — Edit a User
+  ─────────────────────
+  Steps:
+    1. Select "Saad Akbib" in the table.
+    2. Click "Modifier".
+    3. Change the Role to "FERMLIYAT".
+    4. Click "Enregistrer".
+  Expected Result:
+    - The role column for Saad updates to FERMLIYAT.
+
+  Test 4 — Reset Password
+  ────────────────────────
+  Steps:
+    1. Select any user in the table.
+    2. Click "Reset Mot de passe".
+    3. Enter new password: test1234
+    4. Click "OK".
+  Expected Result:
+    - A success alert appears.
+    - Verification: Log out, then log in with the same user's email and the
+      new password "test1234". Login should succeed.
+
+  Test 5 — Delete a User
+  ───────────────────────
+  Steps:
+    1. Select the newly created user "nouveau@clemedice.com".
+    2. Click "Supprimer".
+    3. Confirm the deletion.
+  Expected Result:
+    - The user is removed from the table.
+    - The total user count decreases by 1.
+
+
+================================================================================
+  SECTION 11 — TESTING DESIGN PATTERNS (FOR ACADEMIC REPORT)
+================================================================================
+
+  A) Singleton Pattern — AppConfig
+  ──────────────────────────────────
+  File: frontend/src/main/java/com/cabinet/ui/config/AppConfig.java
+
+  How to demonstrate:
+    1. Open AppConfig.java in your IDE.
+    2. Observe that the constructor is private:
+         private AppConfig() {}
+    3. Observe the getInstance() method uses double-checked locking:
+         if (instance == null) {
+             synchronized (AppConfig.class) {
+                 if (instance == null) {
+                     instance = new AppConfig();
+                 }
+             }
+         }
+    4. This ensures only ONE AppConfig object ever exists in the entire
+       application, even if multiple threads call getInstance() at once.
+
+  To verify at runtime:
+    - Call AppConfig.getInstance() twice and compare the references:
+        AppConfig c1 = AppConfig.getInstance();
+        AppConfig c2 = AppConfig.getInstance();
+        // c1 == c2 is always true
+    - SingletonPatternTest in the backend also demonstrates a similar
+      consistency concept for DocumentFactory.
+
+  B) Builder Pattern — RendezVousRequest
+  ────────────────────────────────────────
+  File: frontend/src/main/java/com/cabinet/ui/model/RendezVousRequest.java
+
+  How to demonstrate:
+    1. Open RendezVousRequest.java in your IDE.
+    2. Show the fluent Builder inner class with its chainable setter methods.
+    3. The typical usage pattern:
+         RendezVousRequest request = new RendezVousRequest.Builder()
+             .patientId(1L)
+             .medecinId(1L)
+             .date(LocalDate.now())
+             .heure(LocalTime.of(9, 0))
+             .topic("Controle de routine")
+             .build();
+    4. Show that calling build() without mandatory fields throws an exception:
+         new RendezVousRequest.Builder()
+             .patientId(1L)
+             .build()
+         // Throws IllegalStateException: "medecinId is required"
+    5. The Builder pattern separates object construction from the object's
+       representation. The RendezVousRequest constructor is private, so the
+       only way to create an instance is through the Builder.
+
+  C) Factory Pattern — DocumentFactory
+  ──────────────────────────────────────
+  File: backend/src/main/java/com/cabinet/factory/DocumentFactory.java
+
+  How to demonstrate:
+    1. Open DocumentFactory.java in your IDE.
+    2. Show the createDocument() method that takes a DocumentType enum plus
+       patient details and returns a Map<String, String>.
+    3. The switch statement chooses the correct document structure:
+         - ORDONNANCE        → titre "Ordonnance Medicale"
+         - ATTESTATION       → titre "Attestation Medicale"
+         - CERTIFICAT_ARRET  → titre "Certificat d'Arret de Travail"
+         - CERTIFICAT_APTITUDE → titre "Certificat d'Aptitude"
+    4. The caller does NOT need to know how each document type is constructed.
+       It simply provides the type and the data, and the factory handles the
+       creation logic.
+    5. Run the tests:
+         cd backend
+         mvn test -Dtest=DocumentFactoryTest
+    6. All 5 tests should pass, proving:
+         - Ordonnance has correct type "ORDONNANCE"
+         - Attestation has correct type "ATTESTATION"
+         - Arret de Travail has correct type "ARRET_TRAVAIL"
+         - Certificat d'Aptitude has correct type "APTITUDE"
+         - Every document includes a date field
+
+
+================================================================================
+  SECTION 12 — VERIFYING DATA IN H2 CONSOLE
+================================================================================
+
+  The H2 database console provides direct SQL access to the database.
+
+  Step 1: Open the Console
+  ─────────────────────────
+  1. With the backend running, open a browser.
+  2. Go to: http://localhost:8080/h2-console
+  3. Enter:
+         JDBC URL:  jdbc:h2:file:./data/clemedice
+         Username:  sa
+         Password:  (leave empty)
+  4. Click "Connect".
+
+  Step 2: Run SQL Queries
+  ────────────────────────
+  Copy and paste each query into the SQL editor, then click "Run".
+
+  Query 1 — List all patients:
+      SELECT id, nom, prenom, cin FROM patients ORDER BY id;
+    Expected: 20 rows with patients (Najim, Adil, Saad, Houssam, Mohsin, etc.)
+
+  Query 2 — List all users:
+      SELECT id, nom, email, role, enabled FROM users ORDER BY id;
+    Expected: 5 rows with admin, najim, adil, saad, houssam.
+              admin has role "MEDECIN_PRINCIPAL".
+
+  Query 3 — List all rendez-vous with patient names:
+      SELECT r.id, p.nom, p.prenom, r.date, r.heure, r.statut
+      FROM rendez_vous r
+      JOIN patients p ON r.patient_id = p.id
+      ORDER BY r.date;
+    Expected: 10 rows with various dates, statuses (PLANIFIE, EFFECTUE, ANNULE).
+
+  Query 4 — List all payments:
+      SELECT pa.id, p.nom, pa.montant, pa.mode_paiement, pa.statut
+      FROM paiements pa
+      JOIN rendez_vous r ON pa.rendez_vous_id = r.id
+      JOIN patients p ON r.patient_id = p.id;
+    Expected: 4 rows with amounts 200, 150, 100, 250 MAD.
+
+  Query 5 — Calculate total revenue:
+      SELECT SUM(montant) as total_revenue
+      FROM paiements
+      WHERE statut = 'PAYE';
+    Expected: 700 (the sum of all seeded payments).
+
+
+================================================================================
+  SECTION 13 — COMMON ERRORS AND FIXES
+================================================================================
+
+  Error: "Connection refused" when navigating any screen
+  ────────────────────────────────────────────────────────────────────────
+  Cause: The backend Spring Boot application is not running.
+  Fix: Open a terminal, navigate to the backend folder, and run:
+         mvn spring-boot:run
+       Wait for the "Started CleMediceApplication" message before using the
+       frontend.
+
+  Error: Login fails with "Identifiants incorrects" but credentials are correct
+  ────────────────────────────────────────────────────────────────────────
+  Cause: The backend may have restarted and lost the H2 data file, or the
+         DataInitializer did not run because the database already existed
+         from a prior run.
+  Fix: Check if backend/data/clemedice.mv.db exists. Delete it, restart the
+       backend with "mvn spring-boot:run", and verify the seed message
+       appears in the console.
+
+  Error: PDF does not open after clicking "Generer PDF"
+  ────────────────────────────────────────────────────────────────────────
+  Cause: No default PDF viewer is configured on the system, or the file was
+         generated but could not be opened.
+  Fix:
+    1. Check your system temp folder:
+         C:\Users\HP\AppData\Local\Temp
+    2. Look for files named "ordonnance_X_.pdf" or "attestation_.pdf".
+    3. If the files exist, open them manually with Adobe Acrobat or Edge.
+    4. If they do not exist, check the backend console for any error stack
+       trace related to iText PDF generation.
+
+  Error: Table is empty after login
+  ────────────────────────────────────────────────────────────────────────
+  Cause: DataInitializer did not seed the database.
+  Fix: Look at the backend terminal output. Do you see the line:
+         "=== Seed complete: 20 patients, 5 users, 10 rdv, 4 paiements ==="
+       If not, stop the backend, delete the file "backend/data/clemedice.mv.db"
+       and any "clemedice.trace.db" files, then restart the backend.
+
+  Error: mvn test fails with "Application context failed to load"
+  ────────────────────────────────────────────────────────────────────────
+  Cause: The backend is still running on port 8080 when tests start. The
+         integration tests attempt to start their own embedded server but
+         the port is already taken.
+  Fix: Stop the backend (Ctrl+C in the backend terminal or kill the Java
+       process). Then run "mvn test" again.
+
+  Error: mvn test BUILD FAILURE with "cannot find symbol"
+  ────────────────────────────────────────────────────────────────────────
+  Cause: A required source file is missing or in the wrong package.
+  Fix: Verify that the following files exist in the correct locations:
+         - DocumentFactory.java
+             backend/src/main/java/com/cabinet/factory/DocumentFactory.java
+         - DocumentFactoryTest.java
+             backend/src/test/java/com/cabinet/factory/DocumentFactoryTest.java
+         - PatientServiceTest.java
+             backend/src/test/java/com/cabinet/service/PatientServiceTest.java
+         - SingletonPatternTest.java
+             backend/src/test/java/com/cabinet/factory/SingletonPatternTest.java
+         - PatientControllerIntegrationTest.java
+             backend/src/test/java/com/cabinet/controller/
+               PatientControllerIntegrationTest.java
+
+  Error: mvn javafx:run fails with "JavaFX runtime components missing"
+  ────────────────────────────────────────────────────────────────────────
+  Cause: The system PATH may not include JavaFX modules.
+  Fix: Run the frontend using the Maven wrapper which includes all required
+       plugins:
+         cd frontend
+         mvn clean javafx:run
+       If it still fails, verify that pom.xml contains the JavaFX Maven plugin
+       configuration (javafx-maven-plugin) and that Java 17+ is set.
+
+  Error: "Database may be already in use" when starting backend
+  ────────────────────────────────────────────────────────────────────────
+  Cause: A previously killed Java process still holds the H2 lock file.
+  Fix: In PowerShell (as Administrator), run:
+         Stop-Process -Name "java" -Force
+       Then restart the backend with "mvn spring-boot:run".
+
+================================================================================
+  END OF TESTING GUIDE
+================================================================================

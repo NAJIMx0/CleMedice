@@ -1,3 +1,4 @@
+C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\config\AppConfig.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\controller\AttestationController.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\controller\ConsultationController.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\controller\DashboardController.java
@@ -17,4 +18,5 @@ C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\O
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\PaiementDTO.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\PatientDTO.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\RendezVousDTO.java
+C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\model\RendezVousRequest.java
 C:\Users\HP\IdeaProjects\CleMedice\frontend\src\main\java\com\cabinet\ui\service\ApiService.java

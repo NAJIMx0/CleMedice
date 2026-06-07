@@ -31,11 +31,13 @@ com\cabinet\repository\UserRepository.class
 com\cabinet\model\User$UserBuilder.class
 com\cabinet\controller\AuthController.class
 com\cabinet\util\ExcelExporter.class
+com\cabinet\factory\DocumentFactory$DocumentType.class
 com\cabinet\service\UserService.class
 com\cabinet\service\RendezVousService.class
 com\cabinet\repository\PaiementRepository.class
 com\cabinet\model\Paiement.class
 com\cabinet\model\Patient.class
+com\cabinet\factory\DocumentFactory.class
 com\cabinet\config\JwtTokenProvider.class
 com\cabinet\model\Role.class
 com\cabinet\model\ConsultationDetail.class

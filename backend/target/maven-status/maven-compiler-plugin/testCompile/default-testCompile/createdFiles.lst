@@ -1,0 +1,4 @@
+com\cabinet\factory\DocumentFactoryTest.class
+com\cabinet\service\PatientServiceTest.class
+com\cabinet\controller\PatientControllerIntegrationTest.class
+com\cabinet\factory\SingletonPatternTest.class

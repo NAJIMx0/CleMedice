@@ -39,6 +39,7 @@ C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\repository\
 C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\repository\PaiementRepository.java
 C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\service\AuthService.java
 C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\controller\OrdonnanceController.java
+C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\factory\DocumentFactory.java
 C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\repository\ConsultationDetailRepository.java
 C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\config\JwtAuthenticationFilter.java
 C:\Users\HP\IdeaProjects\CleMedice\backend\src\main\java\com\cabinet\model\StatutRDV.java

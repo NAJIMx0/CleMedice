@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c903a4b1-a440-4a02-b93a-5f980f4608c3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/data/clemedice.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/data/clemedice.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/cabinet/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/cabinet/config/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/cabinet/config/DataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/cabinet/config/DataInitializer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/DashboardView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/resources/com/cabinet/ui/view/DashboardView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/DashboardView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/classes/com/cabinet/ui/view/DashboardView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +42,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.DocumentFactoryTest.testCreateOrdonnance.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -67,7 +64,23 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.DocumentFactoryTest.testCreateOrdonnance">
+    <configuration name="DocumentFactoryTest.testCreateOrdonnance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="clemedice-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cabinet.factory.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.cabinet.factory" />
+      <option name="MAIN_CLASS_NAME" value="com.cabinet.factory.DocumentFactoryTest" />
+      <option name="METHOD_NAME" value="testCreateOrdonnance" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CleMediceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="clemedice-backend" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.cabinet.CleMediceApplication" />
@@ -75,6 +88,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.DocumentFactoryTest.testCreateOrdonnance" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -100,7 +118,7 @@
       <workItem from="1780268886646" duration="509000" />
       <workItem from="1780410754321" duration="16000" />
       <workItem from="1780415791187" duration="659000" />
-      <workItem from="1780759652268" duration="10632000" />
+      <workItem from="1780759652268" duration="15247000" />
     </task>
     <servers />
   </component>
