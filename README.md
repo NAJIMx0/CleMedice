@@ -124,10 +124,10 @@ On the first startup, the backend automatically seeds data (see [Seed Data](#see
 | Email | Password | Role |
 |---|---|---|
 | `admin@clemedice.com` | `admin123` | `MEDECIN_PRINCIPAL` |
-| `najim@clemedice.com` | `najim123` | `FERMLIYAT` |
-| `adil@clemedice.com` | `adil123` | `ASSISTANTE` |
-| `saad@clemedice.com` | `saad123` | `AUTRE_MEDECIN` |
-| `houssam@clemedice.com` | `houssam123` | `FERMLIYAT` |
+| `najim@clemedice.com` | `najim123` | `AUTRE_MEDECIN` |
+| `adil@clemedice.com` | `adil123` | `FERMLIYAT` |
+| `saad@clemedice.com` | `saad123` | `ASSISTANTE` |
+| `houssam@clemedice.com` | `houssam123` | `AUTRE_MEDECIN` |
 
 Additional users can be created through the frontend (Users section, visible only to `MEDECIN_PRINCIPAL` role).
 
